@@ -1,5 +1,8 @@
 package com.example.admin.stockmonitor.Classes;
 
+/**
+ * Sector that uses Enumerator with id & value to differentiate
+ */
 public enum Sector {
     TECHNOLOGY(0,"Technology"),
     HEALTHCARE(1,"Healthcare"),

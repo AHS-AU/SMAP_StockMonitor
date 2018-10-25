@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -23,7 +25,6 @@ public class OverviewActivity extends Activity {
     // UI Variables
     private ListView lvStocks;
 
-
     // Variables
     private ArrayList<Stock> mListOfStocks = new ArrayList<>();
 
@@ -33,18 +34,42 @@ public class OverviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
+        // Set up UI variables
+        lvStocks = findViewById(R.id.lvStocks);
+
+        // TODO Replace these with dynamic from Room Persistance DB
         Stock stock1 = new Stock("Facebook", 99, 43, Sector.TECHNOLOGY);
         Stock stock2 = new Stock("Google", 12, 69, Sector.HEALTHCARE);
-
         mListOfStocks.add(stock1);
         mListOfStocks.add(stock2);
 
-        lvStocks = findViewById(R.id.lvStocks);
+        // Set up the Custom Adapter StockAdapter that creates the UI from list_of_stocks.xml
         lvStocks.setAdapter(new StockAdapter(OverviewActivity.this, mListOfStocks));
 
-
+        /**
+         * Listview: Shows Stocks
+         * Function: Start DetailsActivity with the Stock Item
+         */
+        lvStocks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Stock mStockItem = mListOfStocks.get(position);
+                startDetailsActivity(mStockItem);
+            }
+        });
     }
 
+    /**
+     * Start Details Activity when item from Listview is clicked
+     * @param vStockItem: Stock Object see /Classes/Stock.java for the class
+     */
+    public void startDetailsActivity(Stock vStockItem){
+        Intent intDetailsActivity = new Intent(OverviewActivity.this, DetailsActivity.class);
+        Bundle mStockBundle = new Bundle();
+        mStockBundle.putSerializable(EXTRA_STOCK, vStockItem);
+        intDetailsActivity.putExtras(mStockBundle);
+        startActivityForResult(intDetailsActivity, REQ_OVERVIEW_UPDATE);
+    }
 
     /**********************************************************************************************
      *                                   Override Functions                                       *

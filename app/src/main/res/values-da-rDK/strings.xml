@@ -3,7 +3,7 @@
     <string name="app_name">AktieOvervåger</string>
     <string name="purchase">"Købt ved: "</string>
     <string name="stockName">Aktie Navn</string>
-    <string name="myStock">Min Aktie:</string>
+    <string name="myStock">Mine Aktier:</string>
     <string name="btnOverview1">Detaljer</string>
     <string name="name">Navn:</string>
     <string name="price">Pris:</string>

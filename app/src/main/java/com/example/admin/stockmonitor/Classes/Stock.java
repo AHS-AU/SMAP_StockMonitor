@@ -2,6 +2,9 @@ package com.example.admin.stockmonitor.Classes;
 
 import java.io.Serializable;
 
+/**
+ * Create a Stock object
+ */
 public class Stock implements Serializable {
     // Attributes
     private String StockName;

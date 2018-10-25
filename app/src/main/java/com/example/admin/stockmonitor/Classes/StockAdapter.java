@@ -11,17 +11,28 @@ import com.example.admin.stockmonitor.R;
 
 import java.util.List;
 
+/**
+ * StockAdapter is a class that sets up a Custom Adapter
+ * to work with layout given in list_of_stocks.xml
+ */
 public class StockAdapter extends BaseAdapter {
-    private List<Stock> mStockList;
 
-    Stock mStock;
+    private List<Stock> mStockList;
     private Context mContext;
 
+    /**
+     * Default Constructor
+     * @param context: Context
+     * @param list: List of Stock Objects from /Classes/Stock.java
+     */
     public StockAdapter(Context context, List<Stock> list){
         this.mContext = context;
         this.mStockList = list;
     }
 
+    /**********************************************************************************************
+     *                                   Override Functions                                       *
+     *********************************************************************************************/
     @Override
     public int getCount(){
         if (mStockList == null){
@@ -43,6 +54,13 @@ public class StockAdapter extends BaseAdapter {
         return null;
     }
 
+    /**
+     * Method sets up the View
+     * @param position Position of Item
+     * @param convertView ignore
+     * @param parent ignore
+     * @return Returns view to the layout
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         if (convertView == null){
@@ -52,16 +70,16 @@ public class StockAdapter extends BaseAdapter {
         }
 
         if (mStockList != null && mStockList.size() > position){
-            mStock = mStockList.get(position);
+            Stock mStock = mStockList.get(position);
 
             TextView txtStockName = convertView.findViewById(R.id.txtStockName);
-            txtStockName.setText(mStock.getStockName().toString());
+            txtStockName.setText(mStock.getStockName());
 
             TextView txtPurchasePrice = convertView.findViewById(R.id.txtPurchasePrice);
-            txtPurchasePrice.setText(String.format("%f", mStock.getPurchasePrice()));
+            txtPurchasePrice.setText(String.format(java.util.Locale.US, "%.2f", mStock.getPurchasePrice()));
 
             TextView txtDifferencePrice = convertView.findViewById(R.id.txtDifferencePrice);
-            txtDifferencePrice.setText(mStock.getStockName().toString());
+            txtDifferencePrice.setText(mStock.getStockName());
 
             return convertView;
         }

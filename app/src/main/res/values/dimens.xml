@@ -9,6 +9,9 @@
     <dimen name="txtMediumWidth">150dp</dimen>
     <dimen name="txtMediumHeight">50dp</dimen>
 
+    <!-- Listview Size -->
+    <dimen name="lvNormalSize">16sp</dimen>
+
     <!-- Button Normal -->
     <dimen name="btnNormalWidth">150dp</dimen>
     <dimen name="btnNormalHeight">50dp</dimen>
