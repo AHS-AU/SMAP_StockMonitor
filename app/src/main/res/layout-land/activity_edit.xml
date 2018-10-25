@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditActivity">
+
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="@dimen/btnNormalWidth"
+        android:layout_height="@dimen/btnNormalHeight"
+        android:maxLength="32"
+        android:text="@string/btnCancel"
+        android:textAllCaps="false"
+        android:textSize="@dimen/btnNormalTextSize"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@drawable/button_text_selector"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSector2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline3" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="@dimen/btnNormalWidth"
+        android:layout_height="wrap_content"
+        android:text="@string/btnSave"
+        android:textAllCaps="false"
+        android:textSize="@dimen/btnNormalTextSize"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@drawable/button_text_selector"
+        app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/editName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtName2"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="@dimen/txtMediumHeight"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/name"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtPrice2"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="@dimen/txtMediumHeight"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/price"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtName2"
+        app:layout_constraintTop_toBottomOf="@+id/txtName2" />
+
+    <TextView
+        android:id="@+id/txtStocks2"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="@dimen/txtMediumHeight"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/numStocks"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtPrice2"
+        app:layout_constraintTop_toBottomOf="@+id/txtPrice2" />
+
+    <TextView
+        android:id="@+id/txtSector2"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="@dimen/txtMediumHeight"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/sector"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txtStocks2"
+        app:layout_constraintTop_toBottomOf="@+id/txtStocks2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <EditText
+        android:id="@+id/editName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:inputType="textNoSuggestions"
+        android:maxLength="24"
+        android:selectAllOnFocus="true"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/txtName2" />
+
+    <EditText
+        android:id="@+id/editPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName|numberDecimal"
+        android:maxLength="16"
+        android:selectAllOnFocus="true"
+        android:textSize="@dimen/txtNormalSize"
+        android:digits="1234567890."
+        app:layout_constraintStart_toStartOf="@+id/editName"
+        app:layout_constraintTop_toTopOf="@+id/txtPrice2" />
+
+    <EditText
+        android:id="@+id/editStocks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:maxLength="16"
+        android:selectAllOnFocus="true"
+        android:textSize="@dimen/txtNormalSize"
+        android:digits="1234567890"
+        app:layout_constraintStart_toStartOf="@+id/editPrice"
+        app:layout_constraintTop_toTopOf="@+id/txtStocks2" />
+
+    <RadioGroup
+        android:id="@+id/rgSector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/editStocks"
+        app:layout_constraintTop_toTopOf="@+id/txtSector2">
+
+        <RadioButton
+            android:id="@+id/radioTechnology"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/radio_tech"
+            android:textSize="@dimen/txtNormalSize" />
+
+        <RadioButton
+            android:id="@+id/radioHealthcare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/radio_health"
+            android:textSize="@dimen/txtNormalSize" />
+
+        <RadioButton
+            android:id="@+id/radioBasicMats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/radio_basicmats"
+            android:textSize="@dimen/txtNormalSize" />
+    </RadioGroup>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+</android.support.constraint.ConstraintLayout>

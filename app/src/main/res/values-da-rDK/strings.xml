@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AktieOvervåger</string>
+    <string name="purchase">"Købt ved: "</string>
+    <string name="stockName">Aktie Navn</string>
+    <string name="myStock">Min Aktie:</string>
+    <string name="btnOverview1">Detaljer</string>
+    <string name="name">Navn:</string>
+    <string name="price">Pris:</string>
+    <string name="numStocks">#Aktier:</string>
+    <string name="sector">Sektion:</string>
+    <string name="btnBack">Tilbage</string>
+    <string name="btnEdit">Redigere</string>
+    <string name="radio_tech">Teknologi</string>
+    <string name="radio_health">Sundhed</string>
+    <string name="radio_basicmats">Grundmateriale</string>
+    <string name="btnCancel">Fortryd</string>
+    <string name="btnSave">Gem</string>
+    <string name="DetailsActionbar">Aktie Detaljer</string>
+    <string name="EditActionbar">Redigere dine aktier</string>
+</resources>

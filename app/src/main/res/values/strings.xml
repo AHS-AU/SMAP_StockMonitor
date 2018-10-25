@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">StockMonitor</string>
+    <string name="myStock">My Stock:</string>
+    <string name="stockName">Stock Name</string>
+    <string name="purchase">Purchased at:\u0020</string>
+    <string name="btnOverview1">Details</string>
+    <string name="name">Name:</string>
+    <string name="price">Price:</string>
+    <string name="numStocks">#Stocks:</string>
+    <string name="sector">Sector:</string>
+    <string name="btnBack">Back</string>
+    <string name="btnEdit">Edit</string>
+    <string name="radio_tech">Technology</string>
+    <string name="radio_health">Healthcare</string>
+    <string name="radio_basicmats">Basic Materials</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="btnSave">Save</string>
+    <string name="DetailsActionbar">Stock Details</string>
+    <string name="EditActionbar">Edit your stocks</string>
+
+
+</resources>

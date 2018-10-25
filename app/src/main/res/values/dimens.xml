@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ImageView -->
+    <dimen name="imgSquareSmall">150dp</dimen>
+
+    <!-- TextView -->
+    <dimen name="txtHeaderSize">32sp</dimen>
+    <dimen name="txtNormalSize">24sp</dimen>
+    <dimen name="txtMediumWidth">150dp</dimen>
+    <dimen name="txtMediumHeight">50dp</dimen>
+
+    <!-- Button Normal -->
+    <dimen name="btnNormalWidth">150dp</dimen>
+    <dimen name="btnNormalHeight">50dp</dimen>
+    <dimen name="btnNormalTextSize">24sp</dimen>
+
+    <!-- EditText -->
+    <dimen name="editNormalWidth">300dp</dimen>
+    <dimen name="editNormalHeight">50dp</dimen>
+
+</resources>

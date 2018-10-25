@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailsActivity">
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="@string/name"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtPrice"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/price"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtName"
+        app:layout_constraintTop_toBottomOf="@+id/txtName" />
+
+    <TextView
+        android:id="@+id/txtStocks"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/numStocks"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtPrice"
+        app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+
+    <TextView
+        android:id="@+id/txtSector"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/sector"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txtStocks"
+        app:layout_constraintTop_toBottomOf="@+id/txtStocks"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtDisplayName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:maxLength="32"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtName"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/txtName" />
+
+    <TextView
+        android:id="@+id/txtDisplayPrice"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:maxLength="32"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtPrice"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplayName"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplayName"
+        app:layout_constraintTop_toTopOf="@+id/txtPrice" />
+
+    <TextView
+        android:id="@+id/txtDisplayStocks"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:maxLength="32"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtStocks"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplayPrice"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplayPrice"
+        app:layout_constraintTop_toTopOf="@+id/txtStocks" />
+
+    <TextView
+        android:id="@+id/txtDisplaySector"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:maxLength="32"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSector"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplayStocks"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplayStocks"
+        app:layout_constraintTop_toTopOf="@+id/txtSector" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="@dimen/btnNormalWidth"
+        android:layout_height="@dimen/btnNormalHeight"
+        android:text="@string/btnBack"
+        android:textAllCaps="false"
+        android:textSize="@dimen/btnNormalTextSize"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@drawable/button_text_selector"
+        app:layout_constraintBottom_toBottomOf="@+id/txtDisplaySector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/guideline2" />
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="@dimen/btnNormalWidth"
+        android:layout_height="@dimen/btnNormalHeight"
+        android:layout_marginBottom="16dp"
+        android:text="@string/btnEdit"
+        android:textAllCaps="false"
+        android:textSize="@dimen/btnNormalTextSize"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@drawable/button_text_selector"
+        app:layout_constraintBottom_toTopOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/txtDisplayName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+</android.support.constraint.ConstraintLayout>
