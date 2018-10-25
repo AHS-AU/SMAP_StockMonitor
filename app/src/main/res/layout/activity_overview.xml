@@ -10,4 +10,11 @@
     android:orientation="vertical">
 
 
+    <ListView
+        android:id="@+id/lvStocks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" >
+
+    </ListView>
 </android.support.constraint.ConstraintLayout>

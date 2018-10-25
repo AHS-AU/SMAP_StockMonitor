@@ -6,23 +6,41 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.admin.stockmonitor.Classes.Sector;
 import com.example.admin.stockmonitor.Classes.Stock;
+import com.example.admin.stockmonitor.Classes.StockAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
 public class OverviewActivity extends Activity {
     private static final String TAG = OverviewActivity.class.getSimpleName();
     // UI Variables
+    private ListView lvStocks;
+
 
     // Variables
+    private ArrayList<Stock> mListOfStocks = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
+        Stock stock1 = new Stock("Facebook", 99, 43, Sector.TECHNOLOGY);
+        Stock stock2 = new Stock("Google", 12, 69, Sector.HEALTHCARE);
+
+        mListOfStocks.add(stock1);
+        mListOfStocks.add(stock2);
+
+        lvStocks = findViewById(R.id.lvStocks);
+        lvStocks.setAdapter(new StockAdapter(OverviewActivity.this, mListOfStocks));
 
 
     }
