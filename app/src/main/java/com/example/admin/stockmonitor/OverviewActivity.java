@@ -3,6 +3,7 @@ package com.example.admin.stockmonitor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,9 +12,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Classes.Sector;
 import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.Classes.StockAdapter;
+import com.example.admin.stockmonitor.Utilities.StockService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +37,27 @@ public class OverviewActivity extends Activity {
     private static final String TAG = OverviewActivity.class.getSimpleName();
     // UI Variables
     private ListView lvStocks;
+    private Button btnAddStock;
 
     // Variables
     private ArrayList<Stock> mListOfStocks = new ArrayList<>();
+    private RequestQueue mQueue;
 
+    // TODO: Delete later
+    // API KEY: c49a5a1d9ce7452c824a7eed76552e65
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+        // Set up Service Intent
+        Intent mStockServiceIntent = new Intent(this, StockService.class);
+        startService(mStockServiceIntent);
+        //ContextCompat.startForegroundService(this, mStockServiceIntent);
 
         // Set up UI variables
         lvStocks = findViewById(R.id.lvStocks);
+        btnAddStock = findViewById(R.id.btnAddStock);
 
         // TODO Replace these with dynamic from Room Persistance DB
         Stock stock1 = new Stock("Facebook", 99, 43, Sector.TECHNOLOGY);
@@ -57,6 +79,36 @@ public class OverviewActivity extends Activity {
                 startDetailsActivity(mStockItem);
             }
         });
+
+        btnAddStock.setOnClickListener(v -> addStock());
+
+    }
+
+    public void addStock() {
+        if (mQueue == null) {
+            Log.d(TAG, "tmpDebug: mQueue is null");
+            mQueue = Volley.newRequestQueue(this);
+        }
+        String url = IEXTRADING_STOCK_API_CALL;
+        JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject("quote");
+                            Log.d(TAG, "tmpdebug: " + jsonObject.getString("companyName"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        mQueue.add(mRequest);
     }
 
     /**
