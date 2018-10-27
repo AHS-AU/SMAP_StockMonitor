@@ -32,6 +32,7 @@ public abstract class BookDatabase extends RoomDatabase {
         return instance;
     }
 
+    // Callback called onCreate to fill up start Stocks
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {

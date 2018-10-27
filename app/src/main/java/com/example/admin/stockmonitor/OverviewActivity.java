@@ -37,9 +37,6 @@ public class OverviewActivity extends Activity {
     private ArrayList<Stock> mListOfStocks = new ArrayList<>();
     private RequestQueue mQueue;
 
-    // TODO: Delete later
-    // API KEY: c49a5a1d9ce7452c824a7eed76552e65
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

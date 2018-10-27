@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Repository is not a part of the Architecture Components,
- * it's a "middle-ground" between the ViewModel & Room.
+ * it's a middle-ground between the ViewModel & Room DAO.
  */
 public class BookRepository {
     private BookDao bookDao;
