@@ -1,4 +1,4 @@
-package com.example.admin.stockmonitor.Room;
+package com.example.admin.stockmonitor.Room.Book;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -17,7 +17,6 @@ public abstract class BookDatabase extends RoomDatabase {
      * @param context
      * @return : If(Instance == null): return new Database Instance
      *           Else: return Existing Database Instance
-     *
      */
     public static synchronized BookDatabase getInstance(Context context){
         if (instance == null){

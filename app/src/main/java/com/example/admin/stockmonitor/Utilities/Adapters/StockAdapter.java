@@ -1,4 +1,4 @@
-package com.example.admin.stockmonitor.Adapters;
+package com.example.admin.stockmonitor.Utilities.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

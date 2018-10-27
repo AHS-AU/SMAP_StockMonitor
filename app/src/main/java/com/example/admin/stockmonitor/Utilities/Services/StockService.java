@@ -1,9 +1,8 @@
-package com.example.admin.stockmonitor.Utilities;
+package com.example.admin.stockmonitor.Utilities.Services;
 
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;

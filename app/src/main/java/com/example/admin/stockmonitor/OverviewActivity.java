@@ -17,8 +17,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Classes.Sector;
 import com.example.admin.stockmonitor.Classes.Stock;
-import com.example.admin.stockmonitor.Adapters.StockAdapter;
-import com.example.admin.stockmonitor.Utilities.StockService;
+import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
+import com.example.admin.stockmonitor.Utilities.Services.StockService;
 
 import org.json.JSONException;
 import org.json.JSONObject;

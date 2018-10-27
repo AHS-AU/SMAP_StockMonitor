@@ -1,4 +1,4 @@
-package com.example.admin.stockmonitor.Room;
+package com.example.admin.stockmonitor.Room.Book;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

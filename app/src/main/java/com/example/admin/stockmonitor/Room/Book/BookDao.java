@@ -1,4 +1,4 @@
-package com.example.admin.stockmonitor.Room;
+package com.example.admin.stockmonitor.Room.Book;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Query;
