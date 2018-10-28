@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.R;
+import com.example.admin.stockmonitor.Room.Book.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,16 +21,12 @@ import java.util.List;
 public class StockAdapter extends BaseAdapter {
 
     private List<Stock> mStockList;
+    private List<Book> mBookList = new ArrayList<>();
     private Context mContext;
 
-    /**
-     * Default Constructor
-     * @param context: Context
-     * @param list: List of Stock Objects from /Classes/Stock.java
-     */
-    public StockAdapter(Context context, List<Stock> list){
+    public StockAdapter(Context context, List<Book> books){
         this.mContext = context;
-        this.mStockList = list;
+        this.mBookList = books;
     }
 
     /**********************************************************************************************
@@ -36,10 +34,10 @@ public class StockAdapter extends BaseAdapter {
      *********************************************************************************************/
     @Override
     public int getCount(){
-        if (mStockList == null){
+        if (mBookList == null){
             return 0;
         }
-        return mStockList.size();
+        return mBookList.size();
     }
 
     @Override
@@ -49,8 +47,8 @@ public class StockAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position){
-        if (mStockList != null && mStockList.size() > position){
-            return mStockList.get(position);
+        if (mBookList != null && mBookList.size() > position){
+            return mBookList.get(position);
         }
         return null;
     }
@@ -70,17 +68,20 @@ public class StockAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_of_stocks, null);
         }
 
-        if (mStockList != null && mStockList.size() > position){
-            Stock mStock = mStockList.get(position);
+        if (mBookList != null && mBookList.size() > position){
+            //Stock mStock = mStockList.get(position);
+            Book mBook = mBookList.get(position);
 
             TextView txtStockName = convertView.findViewById(R.id.txtStockName);
-            txtStockName.setText(mStock.getStockName());
+            //txtStockName.setText(mStock.getStockName());
+            txtStockName.setText(mBook.getCompanyName());
 
             TextView txtPurchasePrice = convertView.findViewById(R.id.txtPurchasePrice);
-            txtPurchasePrice.setText(String.format(java.util.Locale.US, "%.2f", mStock.getPurchasePrice()));
+            //txtPurchasePrice.setText(String.format(java.util.Locale.US, "%.2f", mStock.getPurchasePrice()));
+            txtPurchasePrice.setText(mBook.getLatestPrice());
 
             TextView txtDifferencePrice = convertView.findViewById(R.id.txtDifferencePrice);
-            txtDifferencePrice.setText(mStock.getStockName());
+            txtDifferencePrice.setText(mBook.getSymbol());
 
             return convertView;
         }

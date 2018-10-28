@@ -52,6 +52,9 @@ public abstract class BookDatabase extends RoomDatabase {
             bookDao.insert(new Book("Company 1", "Symbol 1", "PE 1", "LP 1", "LU 1"));
             bookDao.insert(new Book("Company 2", "Symbol 2", "PE 2", "LP 2", "LU 2"));
             bookDao.insert(new Book("Company 3", "Symbol 3", "PE 3", "LP 3", "LU 3"));
+            bookDao.insert(new Book("Company 4", "Symbol 4", "PE 4", "LP 4", "LU 4"));
+            bookDao.insert(new Book("Company 5", "Symbol 5", "PE 5", "LP 5", "LU 5"));
+            bookDao.insert(new Book("Company 6", "Symbol 6", "PE 6", "LP 6", "LU 6"));
             return null;
         }
     }

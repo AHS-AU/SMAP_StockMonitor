@@ -4,13 +4,17 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 
 
 import com.example.admin.stockmonitor.Classes.Stock;
+import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
+import com.example.admin.stockmonitor.Room.Book.Book;
+import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
 
 import java.util.List;
 
@@ -21,7 +25,7 @@ public class StockService extends Service {
 
     private int wildCounter = 0;
     private boolean isRunning = false;
-    private static final long mServiceInterval = 10*1000;
+    private static final long mServiceInterval = 6*1000;
 
 
     // Constructor
@@ -38,7 +42,7 @@ public class StockService extends Service {
         return null;
     }
 
-    private static void doBackgroundThing(final long waitTimeInMillis){
+    private static void doBackgroundThing(){
         AsyncTask<Object, Object, String> task = new AsyncTask<Object, Object, String>(){
             // Runs in UI before background thread is called
             @Override
@@ -51,15 +55,14 @@ public class StockService extends Service {
             protected String doInBackground(Object... objects) {
                 String s = "Background job";
                 try{
-                    Log.d(StockServiceTag, "Task Started");
-                    Thread.sleep(waitTimeInMillis);
-                    Log.d(StockServiceTag, "Task Completed");
+                    Thread.sleep(5*1000);
+//                    Book newBook = new Book("NewCompany", "NewSymbol", "NewPE", "NewLP", "NewLU" );
+//                    bookViewModel.insert(newBook);
                 } catch (Exception e){
                     s += " did not finish due to error";
                     return s;
                 }
-
-                s += " completed after " + waitTimeInMillis + " ms";
+                s += " has finished properly";
                 return s;
             }
 
@@ -67,7 +70,9 @@ public class StockService extends Service {
             @Override
             protected void onPostExecute(String stringResult) {
                 super.onPostExecute(stringResult);
-                Log.d(StockServiceTag, "tmpDebug Broadcasting. " + stringResult);
+                Book newBook = new Book("NewCompany", "NewSymbol", "NewPE", "NewLP", "NewLU" );
+                bookViewModel.insert(newBook);
+                Log.d(StockServiceTag, stringResult);
             }
         };
 
@@ -81,24 +86,40 @@ public class StockService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        //isRunning = true;
+        Log.d(StockServiceTag, "tmpDebug: StockService CREATED");
+    }
+
+    // Important, this avoids Memory Leak from Service
+    @Override
+    public boolean onUnbind(Intent intent) {
+        //isRunning = false;
+        Log.d(StockServiceTag, "tmpDebug: StockService onUnbind");
+        return super.onUnbind(intent);
+    }
+
+
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
         isRunning = true;
-        Log.d(StockServiceTag, "StockService CREATED");
+        Log.d(StockServiceTag, "tmpDebug: StockService onRebind");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        Log.d(StockServiceTag, "StockService DESTROYED");
+        Log.d(StockServiceTag, "tmpDebug: StockService DESTROYED");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(StockServiceTag, "StockService on Start Command");
-        new Thread(new Runnable() {
+        Log.d(StockServiceTag, "tmpDebug: StockService on Start Command");
+        Thread serviceThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 while(isRunning){
                     try{
                         wildCounter++;
@@ -113,39 +134,38 @@ public class StockService extends Service {
                         startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
 
                         // TODO: Background Thing
-                        doBackgroundThing(5*1000);
+                        doBackgroundThing();
 
-                    }catch (Exception e){
-                        Log.d(StockServiceTag, "Error in Thread Sleep onStartCommand");
+                    }catch (InterruptedException e){
+                        Log.d(StockServiceTag, "tmpDebug: Error in Thread Sleep onStartCommand");
                     }
-                    Log.d(StockServiceTag, "Service is Running");
+                    Log.d(StockServiceTag, "tmpDebug: Service is Running");
                 }
 
                 stopSelf();
 
             }
-        }).start();
-
-//        //Create Notification
-//        Notification mNotification = new NotificationCompat.Builder(this, NOTIF_CHANNEL_ID_STOCKSERVICE)
-//                .setContentTitle("Stock Service Turd Master")
-//                .setContentText("Hello Content Text? retard :^)")
-//                .setTicker("Hello Content Text? retard :^)")
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setChannelId(NOTIF_CHANNEL_ID_STOCKSERVICE)
-//                .build();
-//        startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
-//
-//        // TODO: Background Thing
-//        doBackgroundThing(5*1000);
-
-        return START_STICKY;
+        });
+        if(!isRunning){
+            serviceThread.start();
+            isRunning = true;
+        }
+        return START_NOT_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         // Activities must bind to the Service to get the newest stock data.
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
+
+    public class LocalBinder extends Binder {
+        public StockService getService(){
+            return StockService.this;
+        }
+    }
+
+    private final IBinder mBinder = new LocalBinder();
 }
