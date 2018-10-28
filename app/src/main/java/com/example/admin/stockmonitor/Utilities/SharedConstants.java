@@ -38,4 +38,8 @@ public final class SharedConstants {
     public static final String IEXTRADING_STOCK_API_CALL =
             "https://api.iextrading.com/1.0/stock/" + "ATVI"  + "/book/" + IEXTRADING_STOCK_API_KEY;
 
+    public String getApiUrl(String symbol){
+        return ("https://api.iextrading.com/1.0/stock/" + symbol  + "/book/" + IEXTRADING_STOCK_API_KEY);
+    }
+
 }

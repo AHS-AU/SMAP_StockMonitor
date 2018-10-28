@@ -119,33 +119,49 @@ public class OverviewActivity extends AppCompatActivity {
     }
 
     public void addStock() {
-        //Book newBook = new Book("NewCompany", "NewSymbol", "NewPE", "NewLP", "NewLU" );
-        //bookViewModel.insert(newBook);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
         if (mQueue == null) {
             Log.d(TAG, "tmpDebug: mQueue is null");
             mQueue = Volley.newRequestQueue(this);
         }
-        String url = IEXTRADING_STOCK_API_CALL;
-        JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject jsonObject = response.getJSONObject("quote");
-                            Log.d(TAG, "tmpdebug: " + jsonObject.getString("companyName"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+        SharedConstants sc = new SharedConstants();
+        ArrayList<String> urlArray = new ArrayList();
+        urlArray.add(sc.getApiUrl("ATVI"));
+        urlArray.add(sc.getApiUrl("GOOGL"));
+        urlArray.add(sc.getApiUrl("AAPL"));
+        urlArray.add(sc.getApiUrl("AMZN"));
+        urlArray.add(sc.getApiUrl("CERN"));
+        urlArray.add(sc.getApiUrl("NFLX"));
+        urlArray.add(sc.getApiUrl("FB"));
+        urlArray.add(sc.getApiUrl("EA"));
+        urlArray.add(sc.getApiUrl("TSLA"));
+        urlArray.add(sc.getApiUrl("EBAY"));
 
-        mQueue.add(mRequest);
+        for (int i = 0; i < urlArray.size(); i++){
+            JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, urlArray.get(i), null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject("quote");
+                                String companyName = jsonObject.getString("companyName");
+                                String symbol = jsonObject.getString("symbol");
+                                String primaryExchange = jsonObject.getString("primaryExchange");
+                                String latestPrice = jsonObject.getString("latestPrice");
+                                String latestUpdate = jsonObject.getString("latestUpdate");
+                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate);
+                                bookViewModel.insert(mBook);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+            mQueue.add(mRequest);
+        }
     }
 
     /**

@@ -10,6 +10,8 @@ import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
@@ -26,7 +28,6 @@ public class StockService extends Service {
     private int wildCounter = 0;
     private boolean isRunning = false;
     private static final long mServiceInterval = 6*1000;
-
 
     // Constructor
     public StockService() {
@@ -70,8 +71,6 @@ public class StockService extends Service {
             @Override
             protected void onPostExecute(String stringResult) {
                 super.onPostExecute(stringResult);
-                Book newBook = new Book("NewCompany", "NewSymbol", "NewPE", "NewLP", "NewLU" );
-                bookViewModel.insert(newBook);
                 Log.d(StockServiceTag, stringResult);
             }
         };
@@ -117,6 +116,7 @@ public class StockService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(StockServiceTag, "tmpDebug: StockService on Start Command");
+
         Thread serviceThread = new Thread(new Runnable() {
             @Override
             public void run() {
