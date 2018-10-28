@@ -10,14 +10,24 @@ import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
+import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.SharedConstants;
 import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
@@ -79,6 +89,53 @@ public class StockService extends Service {
 
     }
 
+    public void addToDb(){
+        BookDatabase db;
+        RequestQueue mQueue = null;
+        if (mQueue == null) {
+            mQueue = Volley.newRequestQueue(this);
+        }
+        SharedConstants sc = new SharedConstants();
+        ArrayList<String> urlArray = new ArrayList();
+        urlArray.add(sc.getApiUrl("ATVI"));
+        urlArray.add(sc.getApiUrl("GOOGL"));
+        urlArray.add(sc.getApiUrl("AAPL"));
+        urlArray.add(sc.getApiUrl("AMZN"));
+        urlArray.add(sc.getApiUrl("CERN"));
+        urlArray.add(sc.getApiUrl("NFLX"));
+        urlArray.add(sc.getApiUrl("FB"));
+        urlArray.add(sc.getApiUrl("EA"));
+        urlArray.add(sc.getApiUrl("TSLA"));
+        urlArray.add(sc.getApiUrl("EBAY"));
+
+        for (int i = 0; i < urlArray.size(); i++){
+            JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, urlArray.get(i), null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject("quote");
+                                String companyName = jsonObject.getString("companyName");
+                                String symbol = jsonObject.getString("symbol");
+                                String primaryExchange = jsonObject.getString("primaryExchange");
+                                String latestPrice = jsonObject.getString("latestPrice");
+                                String latestUpdate = jsonObject.getString("latestUpdate");
+                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate);
+                                bookViewModel.insert(mBook);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+            mQueue.add(mRequest);
+        }
+    }
+
     /**********************************************************************************************
      *                                   Override Functions                                       *
      *********************************************************************************************/
@@ -86,6 +143,7 @@ public class StockService extends Service {
     public void onCreate() {
         super.onCreate();
         //isRunning = true;
+        //addToDb();
         Log.d(StockServiceTag, "tmpDebug: StockService CREATED");
     }
 
