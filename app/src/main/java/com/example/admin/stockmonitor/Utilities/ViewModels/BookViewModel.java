@@ -18,7 +18,7 @@ public class BookViewModel extends AndroidViewModel {
     public BookViewModel(@NonNull Application application) {
         super(application);
         repository = new BookRepository(application);
-        allStocks = repository.getAllBooks();
+        allStocks = repository.getAllStocks();
     }
 
     public void insert(Book book){

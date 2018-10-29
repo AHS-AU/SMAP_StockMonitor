@@ -50,6 +50,10 @@ public class Book {
         return primaryExchange;
     }
 
+    public void setLatestPrice(String latestPrice) {
+        this.latestPrice = latestPrice;
+    }
+
     public String getLatestPrice() {
         return latestPrice;
     }

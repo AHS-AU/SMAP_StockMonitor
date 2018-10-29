@@ -89,6 +89,8 @@ public class StockService extends Service {
 
     }
 
+
+
     public void addToDb(){
         BookDatabase db;
         RequestQueue mQueue = null;

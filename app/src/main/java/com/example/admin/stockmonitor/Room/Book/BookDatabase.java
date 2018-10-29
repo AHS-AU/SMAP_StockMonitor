@@ -1,5 +1,6 @@
 package com.example.admin.stockmonitor.Room.Book;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -7,6 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.bookViewModel;
 
@@ -56,7 +59,65 @@ public abstract class BookDatabase extends RoomDatabase {
             super.onCreate(db);
             new PopulateDbAsyncTask(instance).execute();
         }
+
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            new UpdateDbAsyncTask(instance).execute();
+
+        }
     };
+
+    private static class UpdateDbAsyncTask extends AsyncTask<Void, Void, Void>{
+        private BookDao bookDao;
+
+        UpdateDbAsyncTask(BookDatabase db){
+            bookDao = db.bookDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d("tmpTag", "bookdaosize = " + bookDao.getSize());
+            for(int i = 0; i < bookDao.getSize(); i++){
+                if (bookDao.getAllStocksOnStart() != null){
+                    Book vBook = bookDao.getAllStocksOnStart().get(i);
+                    String symbol = vBook.getSymbol();
+                    SharedConstants sc = new SharedConstants();
+                    String url = sc.getApiUrl(symbol);
+
+                    RequestQueue mQueue = null;
+                    if (mQueue == null) {
+                        mQueue = Volley.newRequestQueue(mContext);
+                    }
+                    JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        JSONObject jsonObject = response.getJSONObject("quote");
+                                        String latestPrice = jsonObject.getString("latestPrice");
+                                        String latestUpdate = jsonObject.getString("latestUpdate");
+                                        vBook.setLatestPrice(latestPrice);
+                                        bookViewModel.update(vBook);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
+
+                    mQueue.add(mRequest);
+
+
+                }
+            }
+            return null;
+        }
+    }
 
     // This class populates the Db with an AsyncTask & uses method addToDb
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void>{

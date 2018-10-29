@@ -3,6 +3,7 @@ package com.example.admin.stockmonitor.Room.Book;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class BookRepository {
 //
 //    }
 
-    public LiveData<List<Book>> getAllBooks(){
+    public LiveData<List<Book>> getAllStocks(){
         return allBooks;
     }
 

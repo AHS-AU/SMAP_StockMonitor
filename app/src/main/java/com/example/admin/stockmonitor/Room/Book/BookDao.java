@@ -27,6 +27,12 @@ public interface BookDao {
     @Query("SELECT * FROM stock_table WHERE symbol = (:symbol)")
     Book getStock(String symbol);
 
+    @Query("SELECT COUNT(*) FROM stock_table")
+    int getSize();
+
+    @Query("SELECT * FROM stock_table")
+    List<Book> getAllStocksOnStart();
+
     // Making it LiveData so we can observe the object's changes asap
     @Query("SELECT * FROM stock_table")
     LiveData<List<Book>> getAllStocks();
