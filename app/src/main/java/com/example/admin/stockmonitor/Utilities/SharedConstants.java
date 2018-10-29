@@ -27,6 +27,7 @@ public final class SharedConstants {
 
     // Intent Filter
     public static final String FILTER_DATA_AVAILABLE = "FILTER_DATA_AVAILABLE";
+    public static final String FILTER_DATA_UPDATE = "FILTER_DATA_UPDATE";
 
     // Save Instance Keys
     public static final String SAVE_STOCK = "SAVE_STOCK";

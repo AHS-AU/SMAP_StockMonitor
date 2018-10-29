@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 
@@ -21,7 +22,9 @@ import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
+import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
 
 import org.json.JSONException;
@@ -38,6 +41,8 @@ public class StockService extends Service {
     private int wildCounter = 0;
     private boolean isRunning = false;
     private static final long mServiceInterval = 6*1000;
+    private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
+    private StockIntentFilter mIntentFilter = new StockIntentFilter();
 
     // Constructor
     public StockService() {
@@ -87,6 +92,11 @@ public class StockService extends Service {
 
         task.execute();
 
+    }
+
+    private void broadcastUpdate(final String action){
+        final Intent intent = new Intent(action);
+        sendBroadcast(intent);
     }
 
 
@@ -146,6 +156,7 @@ public class StockService extends Service {
         super.onCreate();
         //isRunning = true;
         //addToDb();
+        registerReceiver(mStockBroadcastReceiver, mIntentFilter);
         Log.d(StockServiceTag, "tmpDebug: StockService CREATED");
     }
 
@@ -170,6 +181,7 @@ public class StockService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
+        unregisterReceiver(mStockBroadcastReceiver);
         Log.d(StockServiceTag, "tmpDebug: StockService DESTROYED");
     }
 
@@ -192,6 +204,9 @@ public class StockService extends Service {
                                 .setChannelId(NOTIF_CHANNEL_ID_STOCKSERVICE)
                                 .build();
                         startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
+
+                        intent.setAction(FILTER_DATA_UPDATE);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
                         // TODO: Background Thing
                         doBackgroundThing();
