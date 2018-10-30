@@ -22,7 +22,7 @@ public final class SharedConstants {
     public static final String EXTRA_STOCK = "EXTRA_STOCK";
 
     // Intent Filter
-    public static final String FILTER_DATA_AVAILABLE = "FILTER_DATA_AVAILABLE";
+    public static final String FILTER_DATA_SINGLE_UPDATE = "FILTER_DATA_SINGLE_UPDATE";
     public static final String FILTER_DATA_UPDATE = "FILTER_DATA_UPDATE";
 
     // Save Instance Keys

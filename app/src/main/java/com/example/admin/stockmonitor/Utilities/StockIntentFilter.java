@@ -8,7 +8,7 @@ public class StockIntentFilter extends IntentFilter {
 
     public StockIntentFilter() {
         intentFilter = new IntentFilter();
-        intentFilter.addAction(FILTER_DATA_AVAILABLE);
+        intentFilter.addAction(FILTER_DATA_SINGLE_UPDATE);
         intentFilter.addAction(FILTER_DATA_UPDATE);
     }
 

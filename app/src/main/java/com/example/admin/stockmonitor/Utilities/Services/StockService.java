@@ -45,7 +45,7 @@ public class StockService extends Service {
     private final IBinder mBinder = new LocalBinder();
     public static final String TAG = "StockService";
     private boolean isRunning = false;
-    private static final long mServiceInterval = 6*1000;
+    private static final long mServiceInterval = 120*1000;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
 

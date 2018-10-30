@@ -52,6 +52,7 @@ public class OverviewActivity extends AppCompatActivity {
     private RequestQueue mQueue;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private boolean isServiceBound = false;
+    private Book mStock;
 
     //private BookViewModel bookViewModel;
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
@@ -163,7 +164,7 @@ public class OverviewActivity extends AppCompatActivity {
         Log.d(TAG, "onStart() Registering Receivers");
         Intent mStockServiceIntent = new Intent(this, StockService.class);
         startService(mStockServiceIntent);
-        mIntent = new Intent(FILTER_DATA_AVAILABLE);
+        mIntent = new Intent(FILTER_DATA_SINGLE_UPDATE);
         LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
     }
 
@@ -195,8 +196,9 @@ public class OverviewActivity extends AppCompatActivity {
         switch(requestCode){
             case REQ_OVERVIEW_UPDATE:
                 Log.d(TAG, "onActivityResult() requestCode = REQ_OVERVIEW_UPDATE");
-//                mStock = (Stock)data.getSerializableExtra(EXTRA_STOCK);
-//                updateUI();
+                mStock = (Book)data.getSerializableExtra(EXTRA_STOCK);
+                Log.d(TAG, "tmpDebug: mStock " + mStock.getNumberOfStocks());
+                bookViewModel.update(mStock);
                 break;
             default:
                 Log.d(TAG, "onActivityResult() default case");

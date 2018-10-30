@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:maxLength="16"
+        android:maxLength="8"
         android:selectAllOnFocus="true"
         android:textSize="@dimen/txtNormalSize"
         android:digits="1234567890"

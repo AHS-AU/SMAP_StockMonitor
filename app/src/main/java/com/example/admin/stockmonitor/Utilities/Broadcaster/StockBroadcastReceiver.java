@@ -27,8 +27,8 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        if(FILTER_DATA_AVAILABLE.equals(action)){
-            Log.d(TAG, FILTER_DATA_AVAILABLE);
+        if(FILTER_DATA_SINGLE_UPDATE.equals(action)){
+            Log.d(TAG, FILTER_DATA_SINGLE_UPDATE);
 
         }else if (FILTER_DATA_UPDATE.equals(action)){
             Log.d(TAG, FILTER_DATA_UPDATE);
