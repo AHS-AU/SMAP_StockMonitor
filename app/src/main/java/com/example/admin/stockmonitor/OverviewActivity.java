@@ -108,8 +108,10 @@ public class OverviewActivity extends AppCompatActivity {
         lvStocks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Stock mStockItem = mListOfStocks.get(position);
-                startDetailsActivity(mStockItem);
+                if (bookViewModel.getAllStocks().getValue()!= null ){
+                    Book book = bookViewModel.getAllStocks().getValue().get(position);
+                    startDetailsActivity(book);
+                }
             }
         });
 
@@ -118,60 +120,14 @@ public class OverviewActivity extends AppCompatActivity {
     }
 
     public void addStock() {
-        if (mQueue == null) {
-            Log.d(TAG, "addStock() mQueue is null");
-            mQueue = Volley.newRequestQueue(this);
-        }
-        SharedConstants sc = new SharedConstants();
-        ArrayList<String> urlArray = new ArrayList();
-        urlArray.add(sc.getApiUrl("ATVI"));
-        urlArray.add(sc.getApiUrl("GOOGL"));
-        urlArray.add(sc.getApiUrl("AAPL"));
-        urlArray.add(sc.getApiUrl("AMZN"));
-        urlArray.add(sc.getApiUrl("CERN"));
-        urlArray.add(sc.getApiUrl("NFLX"));
-        urlArray.add(sc.getApiUrl("FB"));
-        urlArray.add(sc.getApiUrl("EA"));
-        urlArray.add(sc.getApiUrl("TSLA"));
-        urlArray.add(sc.getApiUrl("EBAY"));
 
-        for (int i = 0; i < urlArray.size(); i++){
-            JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, urlArray.get(i), null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                JSONObject jsonObject = response.getJSONObject("quote");
-                                String companyName = jsonObject.getString("companyName");
-                                String symbol = jsonObject.getString("symbol");
-                                String primaryExchange = jsonObject.getString("primaryExchange");
-                                String latestPrice = jsonObject.getString("latestPrice");
-                                String latestUpdate = jsonObject.getString("latestUpdate");
-                                String change = jsonObject.getString("change");
-                                String sector = jsonObject.getString("sector");
-                                // purchasePrice = latestPrice because we bought at this time.
-                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,
-                                        latestUpdate,change,sector,latestPrice);
-                                bookViewModel.insert(mBook);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                }
-            });
-            mQueue.add(mRequest);
-        }
     }
 
     /**
      * Start Details Activity when item from Listview is clicked
      * @param vStockItem: Stock Object see /Classes/Stock.java for the class
      */
-    public void startDetailsActivity(Stock vStockItem){
+    public void startDetailsActivity(Book vStockItem){
         Intent intDetailsActivity = new Intent(OverviewActivity.this, DetailsActivity.class);
         Bundle mStockBundle = new Bundle();
         mStockBundle.putSerializable(EXTRA_STOCK, vStockItem);

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.admin.stockmonitor.Classes.Stock;
+import com.example.admin.stockmonitor.Room.Book.Book;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
@@ -23,7 +24,7 @@ public class DetailsActivity extends Activity {
     private TextView mTxtDisplaySector;
 
     // Variables
-    private Stock mStock;
+    private Book mStock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class DetailsActivity extends Activity {
         // Get Intent Information
         final Intent mIntent = getIntent();
         Bundle mStockBundle = mIntent.getExtras();
-        mStock = (Stock)mStockBundle.getSerializable(EXTRA_STOCK);
+        mStock = (Book)mStockBundle.getSerializable(EXTRA_STOCK);
 
         // UI References: Buttons / Switches
         mBtnBack = findViewById(R.id.btnBack);
@@ -45,10 +46,10 @@ public class DetailsActivity extends Activity {
         mTxtDisplaySector = findViewById(R.id.txtDisplaySector);
 
         // Update UI with retrieved Intent
-        mTxtDisplayName.setText(mStock.getStockName());
+        mTxtDisplayName.setText(mStock.getCompanyName());
         mTxtDisplayPrice.setText(String.valueOf(mStock.getPurchasePrice()));
         mTxtDisplayStocks.setText(String.valueOf(mStock.getNumberOfStocks()));
-        mTxtDisplaySector.setText(mStock.getSector().getValue());
+        mTxtDisplaySector.setText(mStock.getSector());
 
         // Action Bar
         getActionBar().setTitle(R.string.DetailsActionbar);

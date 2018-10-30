@@ -185,7 +185,7 @@ public abstract class BookDatabase extends RoomDatabase {
                                     String sector = jsonObject.getString("sector");
                                     // purchasePrice = lastestPrice because start up.
                                     Book mBook = new Book(companyName,symbol,primaryExchange,
-                                            latestPrice,latestUpdate,change,sector,latestPrice);
+                                            latestPrice,latestUpdate,change,sector,latestPrice, 1);
                                     bookViewModel.insert(mBook);
                                     //vBookDao.insert(mBook);
                                 } catch (JSONException e) {
