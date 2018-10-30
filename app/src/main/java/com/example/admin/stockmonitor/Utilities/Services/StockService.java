@@ -45,7 +45,6 @@ public class StockService extends Service {
 
     private final IBinder mBinder = new LocalBinder();
     public static final String TAG = "StockService";
-    private int wildCounter = 0;
     private boolean isRunning = false;
     private static final long mServiceInterval = 6*1000;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
@@ -156,7 +155,6 @@ public class StockService extends Service {
             public void run() {
                 while(isRunning){
                     try{
-                        wildCounter++;
                         Thread.sleep(mServiceInterval);
                         SimpleDateFormat mTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                         SimpleDateFormat mDate = new SimpleDateFormat("EEEE, dd. MMMM YYYY", Locale.getDefault());
@@ -169,7 +167,7 @@ public class StockService extends Service {
                                 .setShowWhen(false) // Removes the Default Timestamp
                                 .setSmallIcon(R.mipmap.ic_launcher)
                                 .setChannelId(NOTIF_CHANNEL_ID_STOCKSERVICE)
-                                //.setDefaults(Notification.DEFAULT_SOUND)
+                                //.setDefaults(Notification.DEFAULT_SOUND) // Default sound, very annoying :)
                                 .build();
                         startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
 

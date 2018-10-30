@@ -26,6 +26,7 @@ import static com.example.admin.stockmonitor.Utilities.SharedConstants.bookViewM
 
 @Database(entities = {Book.class}, version = 1)
 public abstract class BookDatabase extends RoomDatabase {
+    public static final String TAG = "BookDatabase";
     public abstract BookDao bookDao();
     private static RequestQueue mQueue;
 
@@ -91,11 +92,11 @@ public abstract class BookDatabase extends RoomDatabase {
      * @param bookDao : BookDao object
      */
     private static void updateDbOnOpen(BookDao bookDao){
-        Log.d("tmpTag", "bookdaosize = " + bookDao.getSize());
+        Log.d(TAG, "BookDao Size = " + bookDao.getSize());
         for(int i = 0; i < bookDao.getSize(); i++){
             if (bookDao.getAllStocksOnStart() != null){
-                Book vBook = bookDao.getAllStocksOnStart().get(i);
-                String symbol = vBook.getSymbol();
+                Book updateBook = bookDao.getAllStocksOnStart().get(i);
+                String symbol = updateBook.getSymbol();
                 SharedConstants sc = new SharedConstants();
                 String url = sc.getApiUrl(symbol);
 
@@ -110,8 +111,9 @@ public abstract class BookDatabase extends RoomDatabase {
                                     JSONObject jsonObject = response.getJSONObject("quote");
                                     String latestPrice = jsonObject.getString("latestPrice");
                                     String latestUpdate = jsonObject.getString("latestUpdate");
-                                    vBook.setLatestPrice(latestPrice);
-                                    bookViewModel.update(vBook);
+                                    updateBook.setLatestPrice(latestPrice);
+                                    updateBook.setLatestUpdate(latestUpdate);
+                                    bookViewModel.update(updateBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

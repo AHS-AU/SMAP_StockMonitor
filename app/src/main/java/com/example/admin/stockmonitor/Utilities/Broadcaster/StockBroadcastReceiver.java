@@ -59,6 +59,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                                         String latestPrice = jsonObject.getString("latestPrice");
                                         String latestUpdate = jsonObject.getString("latestUpdate");
                                         updateBook.setLatestPrice(latestPrice);
+                                        updateBook.setLatestUpdate(latestUpdate);
                                         bookViewModel.update(updateBook);
                                     } catch (JSONException e) {
                                         e.printStackTrace();

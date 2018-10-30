@@ -6,38 +6,72 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/txtStockName"
+        android:id="@+id/txtSymbol"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:text="stockname"
         android:textSize="@dimen/lvNormalSize"
-        app:layout_constraintEnd_toStartOf="@+id/txtPurchasePrice"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/glOverviewLeft"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/txtCompanyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="company"
+        android:textColor="@color/primaryDarkColor"
+        app:layout_constraintStart_toStartOf="@+id/txtSymbol"
+        app:layout_constraintTop_toBottomOf="@id/txtSymbol" />
+
+    <TextView
         android:id="@+id/txtPurchasePrice"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:text="purchase"
         android:textSize="@dimen/lvNormalSize"
-        app:layout_constraintEnd_toStartOf="@+id/txtDifferencePrice"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtStockName"
+        app:layout_constraintEnd_toStartOf="@+id/glOverviewRight"
+        app:layout_constraintStart_toStartOf="@+id/glOverviewLeft"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtDifferencePrice"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:text="diff"
         android:textSize="@dimen/lvNormalSize"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtPurchasePrice"
+        app:layout_constraintStart_toStartOf="@+id/glOverviewRight"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/glOverviewLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="198dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/glOverviewRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
 </android.support.constraint.ConstraintLayout>

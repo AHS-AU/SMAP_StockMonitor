@@ -58,6 +58,10 @@ public class Book {
         return latestPrice;
     }
 
+    public void setLatestUpdate(String latestUpdate) {
+        this.latestUpdate = latestUpdate;
+    }
+
     public String getLatestUpdate() {
         return latestUpdate;
     }

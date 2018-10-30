@@ -120,7 +120,7 @@ public class OverviewActivity extends AppCompatActivity {
 
     public void addStock() {
         if (mQueue == null) {
-            Log.d(TAG, "tmpDebug: mQueue is null");
+            Log.d(TAG, "addStock() mQueue is null");
             mQueue = Volley.newRequestQueue(this);
         }
         SharedConstants sc = new SharedConstants();
@@ -184,7 +184,7 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!isServiceBound){
-            Log.d(TAG, "tmpDebug: onResume() Service Starting");
+            Log.d(TAG, "onResume() Service Starting");
             bindService(new Intent(OverviewActivity.this, StockService.class), mServiceConnection, Context.BIND_AUTO_CREATE);
             isServiceBound = true;
         }
@@ -194,7 +194,7 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (mServiceConnection != null && isServiceBound){
-            Log.d(TAG, "tmpDebug: onDestroy() Service Dead");
+            Log.d(TAG, "onDestroy() Service Dead");
             unbindService(mServiceConnection);
             isServiceBound = false;
         }
@@ -222,7 +222,7 @@ public class OverviewActivity extends AppCompatActivity {
         super.onDestroy();
 
 //        if (mServiceConnection != null && isServiceBound){
-//            Log.d(TAG, "tmpDebug: onDestroy() Service Dead");
+//            Log.d(TAG, "onDestroy() Service Dead");
 //            unbindService(mServiceConnection);
 //            isServiceBound = false;
 //        }
@@ -236,7 +236,7 @@ public class OverviewActivity extends AppCompatActivity {
 //        }
 //        switch(requestCode){
 //            case REQ_OVERVIEW_UPDATE:
-//                Log.d(TAG, "tmpDebug: Overview RESULT_OK");
+//                Log.d(TAG, "Overview RESULT_OK");
 //                mStock = (Stock)data.getSerializableExtra(EXTRA_STOCK);
 //                updateUI();
 //                break;
