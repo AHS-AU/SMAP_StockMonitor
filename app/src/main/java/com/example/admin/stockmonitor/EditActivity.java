@@ -3,6 +3,7 @@ package com.example.admin.stockmonitor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -15,7 +16,7 @@ import com.example.admin.stockmonitor.Classes.Stock;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
-public class EditActivity extends Activity {
+public class EditActivity extends AppCompatActivity {
     private static final String TAG = EditActivity.class.getSimpleName();
     // UI Variables
     private Button mBtnCancel;
@@ -58,8 +59,10 @@ public class EditActivity extends Activity {
         setDisplaySector(mStock.getSector());
 
         // Action Bar
-        getActionBar().setTitle(R.string.EditActionbar);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.DetailsActionbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         /**
          * Button: Cancel

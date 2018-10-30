@@ -3,6 +3,7 @@ package com.example.admin.stockmonitor;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,7 +13,7 @@ import com.example.admin.stockmonitor.Room.Book.Book;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
-public class DetailsActivity extends Activity {
+public class DetailsActivity extends AppCompatActivity {
     private static final String TAG = DetailsActivity.class.getSimpleName();
 
     // UI Variables
@@ -52,9 +53,10 @@ public class DetailsActivity extends Activity {
         mTxtDisplaySector.setText(mStock.getSector());
 
         // Action Bar
-        getActionBar().setTitle(R.string.DetailsActionbar);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.DetailsActionbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         /**
          * Button: Back
          * Function: Return to Previous Activity

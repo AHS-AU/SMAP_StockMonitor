@@ -109,8 +109,8 @@ public class OverviewActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (bookViewModel.getAllStocks().getValue()!= null ){
-                    Book book = bookViewModel.getAllStocks().getValue().get(position);
-                    startDetailsActivity(book);
+                    Book stock = bookViewModel.getAllStocks().getValue().get(position);
+                    startDetailsActivity(stock);
                 }
             }
         });
@@ -187,24 +187,25 @@ public class OverviewActivity extends AppCompatActivity {
 //        }
     }
 
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode != RESULT_OK){
-//            return;
-//        }
-//        switch(requestCode){
-//            case REQ_OVERVIEW_UPDATE:
-//                Log.d(TAG, "Overview RESULT_OK");
+        @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK){
+            Log.d(TAG, "onActivityResult() resultCode != RESULT_OK");
+            return;
+        }
+        switch(requestCode){
+            case REQ_OVERVIEW_UPDATE:
+                Log.d(TAG, "onActivityResult() requestCode = REQ_OVERVIEW_UPDATE");
 //                mStock = (Stock)data.getSerializableExtra(EXTRA_STOCK);
 //                updateUI();
-//                break;
-//            default:
-//                Log.d(TAG, "Default Case for onActivityResult()");
-//                break;
-//        }
-//    }
-//
+                break;
+            default:
+                Log.d(TAG, "onActivityResult() default case");
+                break;
+        }
+    }
+
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
 //        super.onSaveInstanceState(outState);
@@ -217,5 +218,5 @@ public class OverviewActivity extends AppCompatActivity {
 //        mStock = (Stock)savedInstanceState.getSerializable(SAVE_STOCK);
 //        updateUI();
 //    }
-//
+
 }
