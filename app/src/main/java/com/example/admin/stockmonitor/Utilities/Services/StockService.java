@@ -205,8 +205,8 @@ public class StockService extends Service {
                                 .build();
                         startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
 
-                        intent.setAction(FILTER_DATA_UPDATE);
-                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+//                        intent.setAction(FILTER_DATA_UPDATE);
+//                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
                         // TODO: Background Thing
                         doBackgroundThing();

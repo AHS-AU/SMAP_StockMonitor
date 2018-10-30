@@ -84,17 +84,4 @@ public class BookRepository {
         }
     }
 
-//    private static class GetAllStocksAsynctask extends AsyncTask<Book, Void, Void>{
-//        private BookDao bookDao;
-//
-//        private GetAllStocksAsynctask(BookDao bookDao){
-//            this.bookDao = bookDao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Book... books) {
-//            bookDao.insert(books[0]);
-//            return null;
-//        }
-//    }
 }

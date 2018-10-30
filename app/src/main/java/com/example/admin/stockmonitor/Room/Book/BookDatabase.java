@@ -1,6 +1,5 @@
 package com.example.admin.stockmonitor.Room.Book;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -22,13 +21,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.bookViewModel;
 
 @Database(entities = {Book.class}, version = 1)
 public abstract class BookDatabase extends RoomDatabase {
     public abstract BookDao bookDao();
+    private static RequestQueue mQueue;
 
     private static BookDatabase instance;
     private static Context mContext;
@@ -52,7 +51,9 @@ public abstract class BookDatabase extends RoomDatabase {
         return instance;
     }
 
-    // Callback called onCreate to fill up start Stocks
+    /**
+     * Callback called when the Database is Created & Opened
+     */
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -68,6 +69,9 @@ public abstract class BookDatabase extends RoomDatabase {
         }
     };
 
+    /**
+     * This AsyncTask class is used to update the DB whenever it opens
+     */
     private static class UpdateDbAsyncTask extends AsyncTask<Void, Void, Void>{
         private BookDao bookDao;
 
@@ -77,49 +81,55 @@ public abstract class BookDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Log.d("tmpTag", "bookdaosize = " + bookDao.getSize());
-            for(int i = 0; i < bookDao.getSize(); i++){
-                if (bookDao.getAllStocksOnStart() != null){
-                    Book vBook = bookDao.getAllStocksOnStart().get(i);
-                    String symbol = vBook.getSymbol();
-                    SharedConstants sc = new SharedConstants();
-                    String url = sc.getApiUrl(symbol);
-
-                    RequestQueue mQueue = null;
-                    if (mQueue == null) {
-                        mQueue = Volley.newRequestQueue(mContext);
-                    }
-                    JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        JSONObject jsonObject = response.getJSONObject("quote");
-                                        String latestPrice = jsonObject.getString("latestPrice");
-                                        String latestUpdate = jsonObject.getString("latestUpdate");
-                                        vBook.setLatestPrice(latestPrice);
-                                        bookViewModel.update(vBook);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
-                    });
-
-                    mQueue.add(mRequest);
-
-
-                }
-            }
+            updateDbOnOpen(bookDao);
             return null;
         }
     }
 
-    // This class populates the Db with an AsyncTask & uses method addToDb
+    /**
+     * Updates the DB when it opens
+     * @param bookDao : BookDao object
+     */
+    private static void updateDbOnOpen(BookDao bookDao){
+        Log.d("tmpTag", "bookdaosize = " + bookDao.getSize());
+        for(int i = 0; i < bookDao.getSize(); i++){
+            if (bookDao.getAllStocksOnStart() != null){
+                Book vBook = bookDao.getAllStocksOnStart().get(i);
+                String symbol = vBook.getSymbol();
+                SharedConstants sc = new SharedConstants();
+                String url = sc.getApiUrl(symbol);
+
+                if (mQueue == null) {
+                    mQueue = Volley.newRequestQueue(mContext);
+                }
+                JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    JSONObject jsonObject = response.getJSONObject("quote");
+                                    String latestPrice = jsonObject.getString("latestPrice");
+                                    String latestUpdate = jsonObject.getString("latestUpdate");
+                                    vBook.setLatestPrice(latestPrice);
+                                    bookViewModel.update(vBook);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+                mQueue.add(mRequest);
+            }
+        }
+    }
+
+    /**
+     * This AsyncTask class populates the Db when it's created the first time
+     */
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void>{
         private BookDao bookDao;
 
@@ -132,13 +142,16 @@ public abstract class BookDatabase extends RoomDatabase {
             return null;
         }
 
+        /**
+         * Adds the ten initial stocks to the db
+         * @param vBookDao
+         */
         public static void addToDb(BookDao vBookDao){
-            RequestQueue mQueue = null;
             if (mQueue == null) {
                 mQueue = Volley.newRequestQueue(mContext);
             }
             SharedConstants sc = new SharedConstants();
-            ArrayList<String> urlArray = new ArrayList();
+            ArrayList<String> urlArray = new ArrayList<>();
             urlArray.add(sc.getApiUrl("ATVI"));
             urlArray.add(sc.getApiUrl("GOOGL"));
             urlArray.add(sc.getApiUrl("AAPL"));
