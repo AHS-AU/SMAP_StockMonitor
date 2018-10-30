@@ -142,7 +142,28 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSector"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.85" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="@dimen/btnNormalWidth"
+        android:layout_height="@dimen/btnNormalHeight"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_background_selector"
+        android:text="@string/btnDelete"
+        android:textAllCaps="false"
+        android:textColor="@drawable/button_text_selector"
+        android:textSize="@dimen/btnNormalTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnEdit"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toBottomOf="@+id/txtDisplaySector"
+        app:layout_constraintVertical_bias="0.85" />
 
     <Button
         android:id="@+id/btnEdit"
@@ -158,9 +179,7 @@
         android:textSize="@dimen/btnNormalTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/txtDisplaySector"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.85" />
 
 </android.support.constraint.ConstraintLayout>

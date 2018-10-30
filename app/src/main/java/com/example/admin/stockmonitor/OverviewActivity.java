@@ -24,7 +24,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
@@ -50,7 +49,6 @@ public class OverviewActivity extends AppCompatActivity {
 
 
     // Variables
-    private ArrayList<Stock> mListOfStocks = new ArrayList<>();
     private RequestQueue mQueue;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private boolean isServiceBound = false;

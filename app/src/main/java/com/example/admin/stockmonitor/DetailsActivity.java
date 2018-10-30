@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.Room.Book.Book;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
@@ -18,6 +18,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     // UI Variables
     private Button mBtnBack;
+    private Button mBtnDelete;
     private Button mBtnEdit;
     private TextView mTxtDisplayName;
     private TextView mTxtDisplayPrice;
@@ -38,6 +39,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         // UI References: Buttons / Switches
         mBtnBack = findViewById(R.id.btnBack);
+        mBtnDelete = findViewById(R.id.btnDelete);
         mBtnEdit = findViewById(R.id.btnEdit);
 
         // UI References: TextViews
@@ -64,6 +66,12 @@ public class DetailsActivity extends AppCompatActivity {
         mBtnBack.setOnClickListener(v -> onBackPressed());
 
         /**
+         * Button: Delete
+         * Function: Delete the chosen Stock from DB
+         */
+        mBtnDelete.setOnClickListener(v -> deleteStock(mStock));
+
+        /**
          * Button: Edit
          * Function: Start "EditActivity" with necessary stock data
          */
@@ -72,6 +80,11 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    private void deleteStock(Book stock){
+        Log.d(TAG, "DELETE STOCK?");
+        // TODO: Delete the stock from DB
+
+    }
 
     private void startEditActivity(){
         Intent intEditActivity = new Intent (this, EditActivity.class);

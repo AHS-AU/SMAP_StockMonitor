@@ -18,4 +18,5 @@
     <string name="btnSave">Gem</string>
     <string name="DetailsActionbar">Aktie Detaljer</string>
     <string name="EditActionbar">Redigere dine aktier</string>
+    <string name="btnDelete">Slet</string>
 </resources>

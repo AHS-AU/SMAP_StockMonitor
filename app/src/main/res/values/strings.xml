@@ -9,6 +9,7 @@
     <string name="numStocks">#Stocks:</string>
     <string name="sector">Sector:</string>
     <string name="btnBack">Back</string>
+    <string name="btnDelete">Delete</string>
     <string name="btnEdit">Edit</string>
     <string name="radio_tech">Technology</string>
     <string name="radio_health">Healthcare</string>

@@ -19,7 +19,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
@@ -41,7 +40,7 @@ import java.util.Locale;
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
 public class StockService extends Service {
-    private List<Stock> mStockList;
+    private List<Book> mBookList;
 
     private final IBinder mBinder = new LocalBinder();
     public static final String TAG = "StockService";
@@ -54,13 +53,13 @@ public class StockService extends Service {
     public StockService() {
     }
 
-    private List<Stock> getStocks(){
-        return mStockList;
+    private List<Book> getStocks(){
+        return mBookList;
     }
 
 
     // TODO: Complete the method
-    private Stock getStock(String symbol){
+    private Book getStock(String symbol){
         return null;
     }
 
