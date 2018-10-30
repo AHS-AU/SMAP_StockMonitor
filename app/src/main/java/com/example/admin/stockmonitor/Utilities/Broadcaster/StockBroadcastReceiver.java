@@ -32,11 +32,11 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
 
         }else if (FILTER_DATA_UPDATE.equals(action)){
             Log.d(TAG, FILTER_DATA_UPDATE);
-            // Size
             int bookSize = 0;
             if (bookViewModel.getAllStocks().getValue() != null){
                 bookSize = bookViewModel.getAllStocks().getValue().size();
             }
+
             for (int i = 0; i < bookSize; i++){
                 if (bookViewModel.getAllStocks().getValue() != null){
                     Book updateBook = bookViewModel.getAllStocks().getValue().get(i);
@@ -57,9 +57,11 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                                         String latestPrice = jsonObject.getString("latestPrice");
                                         String latestUpdate = jsonObject.getString("latestUpdate");
                                         String change = jsonObject.getString("change");
+                                        String sector = jsonObject.getString("sector");
                                         updateBook.setLatestPrice(latestPrice);
                                         updateBook.setLatestUpdate(latestUpdate);
                                         updateBook.setChange(change);
+                                        updateBook.setSector(sector);
                                         bookViewModel.update(updateBook);
                                     } catch (JSONException e) {
                                         e.printStackTrace();

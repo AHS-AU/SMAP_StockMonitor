@@ -148,7 +148,10 @@ public class OverviewActivity extends AppCompatActivity {
                                 String latestPrice = jsonObject.getString("latestPrice");
                                 String latestUpdate = jsonObject.getString("latestUpdate");
                                 String change = jsonObject.getString("change");
-                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate,change);
+                                String sector = jsonObject.getString("sector");
+                                // purchasePrice = latestPrice because we bought at this time.
+                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,
+                                        latestUpdate,change,sector,latestPrice);
                                 bookViewModel.insert(mBook);
                             } catch (JSONException e) {
                                 e.printStackTrace();

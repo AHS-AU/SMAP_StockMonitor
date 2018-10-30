@@ -27,13 +27,17 @@
         android:id="@+id/txtCompanyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="company"
         android:textColor="@color/primaryDarkColor"
+        app:layout_constraintEnd_toStartOf="@+id/glOverviewLeft"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/txtSymbol"
         app:layout_constraintTop_toBottomOf="@id/txtSymbol" />
 
     <TextView
-        android:id="@+id/txtPurchasePrice"
+        android:id="@+id/txtLatestPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -41,37 +45,55 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:gravity="start"
-        android:text="currentPrice"
-        android:textAlignment="viewStart"
+        android:text="latestPrice"
         android:textSize="@dimen/lvNormalSize"
         app:layout_constraintEnd_toStartOf="@+id/glOverviewRight"
         app:layout_constraintStart_toStartOf="@+id/glOverviewLeft"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtChange"
+        android:id="@+id/txtCurrentChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="currentChange"
-
-        app:layout_constraintStart_toStartOf="@+id/txtPurchasePrice"
-        app:layout_constraintTop_toBottomOf="@id/txtPurchasePrice" />
+        android:textSize="@dimen/lvNormalSize"
+        app:layout_constraintEnd_toStartOf="@+id/glOverviewRight"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtLatestPrice"
+        app:layout_constraintTop_toBottomOf="@id/txtLatestPrice" />
 
     <TextView
-        android:id="@+id/txtDifferencePrice"
+        android:id="@+id/txtPurchasePrice"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="diff"
+        android:gravity="end"
+        android:text="purchased"
+        android:textAlignment="textEnd"
         android:textSize="@dimen/lvNormalSize"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/glOverviewRight"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtDifference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="diff"
+        android:textSize="@dimen/lvNormalSize"
+        app:layout_constraintEnd_toEndOf="@+id/txtPurchasePrice"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/glOverviewRight"
+        app:layout_constraintTop_toBottomOf="@+id/txtPurchasePrice" />
 
     <android.support.constraint.Guideline
         android:id="@+id/glOverviewLeft"
@@ -85,5 +107,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.72" />
 </android.support.constraint.ConstraintLayout>

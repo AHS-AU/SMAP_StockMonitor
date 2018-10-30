@@ -112,9 +112,11 @@ public abstract class BookDatabase extends RoomDatabase {
                                     String latestPrice = jsonObject.getString("latestPrice");
                                     String latestUpdate = jsonObject.getString("latestUpdate");
                                     String change = jsonObject.getString("change");
+                                    String sector = jsonObject.getString("sector");
                                     updateBook.setLatestPrice(latestPrice);
                                     updateBook.setLatestUpdate(latestUpdate);
                                     updateBook.setChange(change);
+                                    updateBook.setSector(sector);
                                     bookViewModel.update(updateBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -180,7 +182,10 @@ public abstract class BookDatabase extends RoomDatabase {
                                     String latestPrice = jsonObject.getString("latestPrice");
                                     String latestUpdate = jsonObject.getString("latestUpdate");
                                     String change = jsonObject.getString("change");
-                                    Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate,change);
+                                    String sector = jsonObject.getString("sector");
+                                    // purchasePrice = lastestPrice because start up.
+                                    Book mBook = new Book(companyName,symbol,primaryExchange,
+                                            latestPrice,latestUpdate,change,sector,latestPrice);
                                     bookViewModel.insert(mBook);
                                     //vBookDao.insert(mBook);
                                 } catch (JSONException e) {

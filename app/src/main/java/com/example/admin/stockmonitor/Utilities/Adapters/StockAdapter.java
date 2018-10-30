@@ -12,6 +12,8 @@ import com.example.admin.stockmonitor.Classes.Stock;
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,33 +77,48 @@ public class StockAdapter extends BaseAdapter {
             //Stock mStock = mStockList.get(position);
             Book mBook = mBookList.get(position);
 
+            // Symbol
             TextView txtSymbol = convertView.findViewById(R.id.txtSymbol);
             txtSymbol.setText(mBook.getSymbol());
-
+            // CompanyName
             TextView txtCompanyName = convertView.findViewById(R.id.txtCompanyName);
             txtCompanyName.setText(mBook.getCompanyName());
 
-            TextView txtPurchasePrice = convertView.findViewById(R.id.txtPurchasePrice);
-            txtPurchasePrice.setText(mBook.getLatestPrice());
+            // LatestPrice
+            TextView txtLatestPrice = convertView.findViewById(R.id.txtLatestPrice);
+            txtLatestPrice.setText(mBook.getLatestPrice());
 
-            TextView txtChange = convertView.findViewById(R.id.txtChange);
-            txtChange.setText(mBook.getChange());
+            // CurrentChange, which is from API
+            TextView txtCurrentChange = convertView.findViewById(R.id.txtCurrentChange);
+            txtCurrentChange.setText(mBook.getChange());
             double mChange = Double.parseDouble(mBook.getChange());
             if (mChange >= 0){
-                txtChange.setTextColor(mContext.getResources().getColor(R.color.change_good));
+                txtCurrentChange.setTextColor(mContext.getResources().getColor(R.color.change_good));
             }else{
-                txtChange.setTextColor(mContext.getResources().getColor(R.color.change_bad));
+                txtCurrentChange.setTextColor(mContext.getResources().getColor(R.color.change_bad));
             }
 
+            // PurchasePrice
+            TextView txtPurchasePrice = convertView.findViewById(R.id.txtPurchasePrice);
+            txtPurchasePrice.setText(mBook.getPurchasePrice());
 
-            TextView txtDifferencePrice = convertView.findViewById(R.id.txtDifferencePrice);
+            // PurchasePrice vs LatestPrice difference
+            TextView txtDifference = convertView.findViewById(R.id.txtDifference);
+            txtDifference.setText(mBook.getPriceDifference());
+            double mDifference = Double.parseDouble(mBook.getPriceDifference());
+            if(mDifference >= 0){
+                txtDifference.setTextColor(mContext.getResources().getColor(R.color.change_good));
+            }else{
+                txtDifference.setTextColor(mContext.getResources().getColor(R.color.change_bad));
+            }
+
             // Example with latestUpdate Epoch
-            long epochValue = Long.parseLong(mBook.getLatestUpdate());
-            Date epochTime = new Date(epochValue);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy\nHH:mm:ss", Locale.getDefault());
-            String timeFormatted = simpleDateFormat.format(epochTime);
+//            long epochValue = Long.parseLong(mBook.getLatestUpdate());
+//            Date epochTime = new Date(epochValue);
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy\nHH:mm:ss", Locale.getDefault());
+//            String timeFormatted = simpleDateFormat.format(epochTime);
 
-            txtDifferencePrice.setText(mBook.getChange());
+
 
             return convertView;
         }
