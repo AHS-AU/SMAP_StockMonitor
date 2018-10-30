@@ -22,17 +22,18 @@ import org.json.JSONObject;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 public final class StockBroadcastReceiver extends BroadcastReceiver {
+    public static final String TAG = "StockBroadCastReceiver";
     private RequestQueue mQueue;
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if(FILTER_DATA_AVAILABLE.equals(action)){
-            Log.d(StockBroadcastReceiverTag, FILTER_DATA_AVAILABLE);
+            Log.d(TAG, FILTER_DATA_AVAILABLE);
             Book newBook = new Book("NewCompany", "NewSymbol", "NewPE", "NewLP", "NewLU" );
             bookViewModel.insert(newBook);
 
         }else if (FILTER_DATA_UPDATE.equals(action)){
-            Log.d(StockBroadcastReceiverTag, FILTER_DATA_AVAILABLE);
+            Log.d(TAG, FILTER_DATA_UPDATE);
             // Size
             int bookSize = 0;
             if (bookViewModel.getAllStocks().getValue() != null){
@@ -46,7 +47,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                     String url = sc.getApiUrl(symbol);
 
                     if (mQueue == null) {
-                        Log.d(StockBroadcastReceiverTag, "RequestQueue mQueue is null, requesting new queue");
+                        Log.d(TAG, "RequestQueue mQueue is null, requesting new queue");
                         mQueue = Volley.newRequestQueue(context);
                     }
                     JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,

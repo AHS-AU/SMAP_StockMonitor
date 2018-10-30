@@ -11,10 +11,6 @@ public final class SharedConstants {
     public static final int REQ_OVERVIEW_UPDATE = 101;
     public static final int REQ_DETAILS_UPDATE = 102;
 
-    // Log Tags Identifiers for non-activities, i.e. could be used for Services
-    public static final String StockServiceTag = "StockService";
-    public static final String StockBroadcastReceiverTag = "StockBroadCastReceiver";
-
     // Notification & Service Channel & Notice Ids
     public static final String NOTIF_CHANNEL_ID_STOCKSERVICE = "STOCKSERVICE_CHANNEL_ID";
     public static final int NOTIF_ID_STOCKSERVICE = 201;
