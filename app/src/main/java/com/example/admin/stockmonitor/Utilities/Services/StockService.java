@@ -2,6 +2,7 @@ package com.example.admin.stockmonitor.Utilities.Services;
 
 import android.app.Notification;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,8 +32,11 @@ import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
@@ -63,12 +67,11 @@ public class StockService extends Service {
 
     /**
      * Background Service updates the Stocks Every 2 min
-     * @param context
-     * @param intent
+     * @param context : Application Context
+     * @param intent : Intent
      */
     private static void doBackgroundThing(Context context, Intent intent){
         AsyncTask<Object, Object, String> task = new AsyncTask<Object, Object, String>(){
-            // Runs in UI before background thread is called
             @Override
             protected void onPreExecute(){
                 super.onPreExecute();
@@ -77,7 +80,7 @@ public class StockService extends Service {
             // Background computation is being handled
             @Override
             protected String doInBackground(Object... objects) {
-                String s = "Background Service Job";
+                String s = "Background Service job";
                 try{
                     Thread.sleep(5*1000);
                     Log.d(TAG, "Background Service is about to send Broadcast with IntentAction = " + FILTER_DATA_UPDATE);
@@ -91,7 +94,6 @@ public class StockService extends Service {
                 return s;
             }
 
-            // Runs in UI when background thread has finished
             @Override
             protected void onPostExecute(String stringResult) {
                 super.onPostExecute(stringResult);
@@ -156,12 +158,18 @@ public class StockService extends Service {
                     try{
                         wildCounter++;
                         Thread.sleep(mServiceInterval);
+                        SimpleDateFormat mTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                        SimpleDateFormat mDate = new SimpleDateFormat("EEEE, dd. MMMM YYYY", Locale.getDefault());
+                        String mNotificationMessage = "Last checked stocks prices at: " + mTime.format(new Date());
                         Notification mNotification = new NotificationCompat.Builder(StockService.this, NOTIF_CHANNEL_ID_STOCKSERVICE)
-                                .setContentTitle("Stock Service Turd Master " + wildCounter)
-                                .setContentText("Hello Content Text? retard :^) " + wildCounter)
-                                .setTicker("Hello Content Text? retard :^) " + wildCounter)
+                                .setContentTitle(getApplicationContext().getString(R.string.app_name))
+                                .setContentText(mNotificationMessage)
+                                .setTicker(mNotificationMessage)
+                                .setSubText(mDate.format(new Date()))
+                                .setShowWhen(false) // Removes the Default Timestamp
                                 .setSmallIcon(R.mipmap.ic_launcher)
                                 .setChannelId(NOTIF_CHANNEL_ID_STOCKSERVICE)
+                                //.setDefaults(Notification.DEFAULT_SOUND)
                                 .build();
                         startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
 
