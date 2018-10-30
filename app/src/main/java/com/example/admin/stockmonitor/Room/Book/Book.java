@@ -18,14 +18,16 @@ public class Book {
     private String primaryExchange;
     private String latestPrice; // Latest Value in Assignment
     private String latestUpdate; // Latest Timestamp in Assignment
+    private String change;
 
     // Constructor
-    public Book(String companyName, String symbol, String primaryExchange, String latestPrice, String latestUpdate) {
+    public Book(String companyName, String symbol, String primaryExchange, String latestPrice, String latestUpdate, String change) {
         this.companyName = companyName;
         this.symbol = symbol;
         this.primaryExchange = primaryExchange;
         this.latestPrice = latestPrice;
         this.latestUpdate = latestUpdate;
+        this.change = change;
     }
 
     // Setters
@@ -64,5 +66,13 @@ public class Book {
 
     public String getLatestUpdate() {
         return latestUpdate;
+    }
+
+    public void setChange(String change) {
+        this.change = change;
+    }
+
+    public String getChange() {
+        return change;
     }
 }

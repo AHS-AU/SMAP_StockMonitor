@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
-        android:text="stockname"
+        android:text="symbol"
         android:textSize="@dimen/lvNormalSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/glOverviewLeft"
@@ -34,23 +34,34 @@
 
     <TextView
         android:id="@+id/txtPurchasePrice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="purchase"
+        android:gravity="start"
+        android:text="currentPrice"
+        android:textAlignment="viewStart"
         android:textSize="@dimen/lvNormalSize"
         app:layout_constraintEnd_toStartOf="@+id/glOverviewRight"
         app:layout_constraintStart_toStartOf="@+id/glOverviewLeft"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtDifferencePrice"
+        android:id="@+id/txtChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="currentChange"
+
+        app:layout_constraintStart_toStartOf="@+id/txtPurchasePrice"
+        app:layout_constraintTop_toBottomOf="@id/txtPurchasePrice" />
+
+    <TextView
+        android:id="@+id/txtDifferencePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
@@ -58,6 +69,7 @@
         android:text="diff"
         android:textSize="@dimen/lvNormalSize"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="@+id/glOverviewRight"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,12 +78,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="198dp" />
+        app:layout_constraintGuide_percent="0.45" />
 
     <android.support.constraint.Guideline
         android:id="@+id/glOverviewRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.66" />
+        app:layout_constraintGuide_percent="0.8" />
 </android.support.constraint.ConstraintLayout>

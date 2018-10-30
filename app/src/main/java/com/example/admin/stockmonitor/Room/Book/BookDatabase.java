@@ -111,8 +111,10 @@ public abstract class BookDatabase extends RoomDatabase {
                                     JSONObject jsonObject = response.getJSONObject("quote");
                                     String latestPrice = jsonObject.getString("latestPrice");
                                     String latestUpdate = jsonObject.getString("latestUpdate");
+                                    String change = jsonObject.getString("change");
                                     updateBook.setLatestPrice(latestPrice);
                                     updateBook.setLatestUpdate(latestUpdate);
+                                    updateBook.setChange(change);
                                     bookViewModel.update(updateBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -177,7 +179,8 @@ public abstract class BookDatabase extends RoomDatabase {
                                     String primaryExchange = jsonObject.getString("primaryExchange");
                                     String latestPrice = jsonObject.getString("latestPrice");
                                     String latestUpdate = jsonObject.getString("latestUpdate");
-                                    Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate);
+                                    String change = jsonObject.getString("change");
+                                    Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate,change);
                                     bookViewModel.insert(mBook);
                                     //vBookDao.insert(mBook);
                                 } catch (JSONException e) {

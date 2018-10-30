@@ -24,8 +24,7 @@ import java.util.Locale;
  */
 public class StockAdapter extends BaseAdapter {
 
-    private List<Stock> mStockList;
-    private List<Book> mBookList = new ArrayList<>();
+    private List<Book> mBookList;
     private Context mContext;
 
     public StockAdapter(Context context, List<Book> books){
@@ -83,8 +82,17 @@ public class StockAdapter extends BaseAdapter {
             txtCompanyName.setText(mBook.getCompanyName());
 
             TextView txtPurchasePrice = convertView.findViewById(R.id.txtPurchasePrice);
-            //txtPurchasePrice.setText(String.format(java.util.Locale.US, "%.2f", mStock.getPurchasePrice()));
             txtPurchasePrice.setText(mBook.getLatestPrice());
+
+            TextView txtChange = convertView.findViewById(R.id.txtChange);
+            txtChange.setText(mBook.getChange());
+            double mChange = Double.parseDouble(mBook.getChange());
+            if (mChange >= 0){
+                txtChange.setTextColor(mContext.getResources().getColor(R.color.change_good));
+            }else{
+                txtChange.setTextColor(mContext.getResources().getColor(R.color.change_bad));
+            }
+
 
             TextView txtDifferencePrice = convertView.findViewById(R.id.txtDifferencePrice);
             // Example with latestUpdate Epoch
@@ -93,8 +101,7 @@ public class StockAdapter extends BaseAdapter {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy\nHH:mm:ss", Locale.getDefault());
             String timeFormatted = simpleDateFormat.format(epochTime);
 
-
-            txtDifferencePrice.setText(timeFormatted);
+            txtDifferencePrice.setText(mBook.getChange());
 
             return convertView;
         }

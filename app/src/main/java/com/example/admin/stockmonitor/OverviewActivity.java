@@ -92,7 +92,6 @@ public class OverviewActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Book> books) {
                 // Set up the Custom Adapter StockAdapter that creates the UI from list_of_stocks.xml
                 lvStocks.setAdapter(new StockAdapter(OverviewActivity.this, books));
-                Toast.makeText(OverviewActivity.this, "onChanged", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -148,7 +147,8 @@ public class OverviewActivity extends AppCompatActivity {
                                 String primaryExchange = jsonObject.getString("primaryExchange");
                                 String latestPrice = jsonObject.getString("latestPrice");
                                 String latestUpdate = jsonObject.getString("latestUpdate");
-                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate);
+                                String change = jsonObject.getString("change");
+                                Book mBook = new Book(companyName,symbol,primaryExchange,latestPrice,latestUpdate,change);
                                 bookViewModel.insert(mBook);
                             } catch (JSONException e) {
                                 e.printStackTrace();

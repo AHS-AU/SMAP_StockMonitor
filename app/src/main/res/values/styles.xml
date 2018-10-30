@@ -5,7 +5,10 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="AppCompatTheme" parent="Theme.AppCompat.Light"></style>
+    <style name="AppCompatTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:actionBarTheme">@color/primaryTextColor</item>
+    </style>
 
     <!-- My Application Theme -->
     <style name="MyTheme" parent="android:Theme.Material.Light.DarkActionBar">

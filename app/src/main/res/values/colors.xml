@@ -3,12 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
     <color name="btn_background">#008CBA</color>
     <color name="btn_text">#FFFFFF</color>
     <color name="btn_pressed">#33CCFF</color>
     <color name="btn_disabled">#D9D9D9</color>
     <color name="btn_disabled_text">#000000</color>
 
+    <color name="change_good">#00c853</color>
+    <color name="change_bad">#d50000</color>
 
     <color name="primaryColor">#cfd8dc</color>
     <color name="primaryLightColor">#ffffff</color>

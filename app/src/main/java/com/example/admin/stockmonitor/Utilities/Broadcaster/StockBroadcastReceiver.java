@@ -29,8 +29,6 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
         final String action = intent.getAction();
         if(FILTER_DATA_AVAILABLE.equals(action)){
             Log.d(TAG, FILTER_DATA_AVAILABLE);
-            Book newBook = new Book("NewCompany", "NewSymbol", "NewPE", "NewLP", "NewLU" );
-            bookViewModel.insert(newBook);
 
         }else if (FILTER_DATA_UPDATE.equals(action)){
             Log.d(TAG, FILTER_DATA_UPDATE);
@@ -58,8 +56,10 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                                         JSONObject jsonObject = response.getJSONObject("quote");
                                         String latestPrice = jsonObject.getString("latestPrice");
                                         String latestUpdate = jsonObject.getString("latestUpdate");
+                                        String change = jsonObject.getString("change");
                                         updateBook.setLatestPrice(latestPrice);
                                         updateBook.setLatestUpdate(latestUpdate);
+                                        updateBook.setChange(change);
                                         bookViewModel.update(updateBook);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
