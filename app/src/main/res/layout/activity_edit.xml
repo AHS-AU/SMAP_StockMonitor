@@ -127,7 +127,6 @@
         android:imeOptions="actionNext|flagForceAscii"
         android:inputType="numberDecimal"
         android:maxLength="16"
-        android:numeric="decimal"
         android:selectAllOnFocus="true"
         android:textSize="@dimen/txtNormalSize"
         app:layout_constraintStart_toStartOf="@+id/editName"

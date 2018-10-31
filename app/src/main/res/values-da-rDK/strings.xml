@@ -19,4 +19,8 @@
     <string name="DetailsActionbar">Aktie Detaljer</string>
     <string name="EditActionbar">Redigere dine aktier</string>
     <string name="btnDelete">Slet</string>
+    <string name="addNumOfStocks">Antal Aktier</string>
+    <string name="addPurchasePrice">Købt Pris</string>
+    <string name="addStockSymbol">Aktie Symbol</string>
+    <string name="addTitle">Tilføj en Aktie fra API</string>
 </resources>

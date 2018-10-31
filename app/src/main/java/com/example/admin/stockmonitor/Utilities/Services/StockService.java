@@ -12,24 +12,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.support.v4.app.NotificationCompat;
 
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
-import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
-import com.example.admin.stockmonitor.Utilities.SharedConstants;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
-import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,26 +26,39 @@ import java.util.Locale;
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
 public class StockService extends Service {
-    private List<Book> mBookList;
-
-    private final IBinder mBinder = new LocalBinder();
     public static final String TAG = "StockService";
+
+    // Variables
+    private final IBinder mBinder = new LocalBinder();
     private boolean isRunning = false;
-    private static final long mServiceInterval = 120*1000;
+    private static final long mServiceInterval = 6*1000;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
 
-    // Constructor
-    public StockService() {
-    }
+    public List<Book> getAllStocks(){
+        int listSize = 0;
+        List<Book> mBooks = new ArrayList<>();
 
-    private List<Book> getStocks(){
-        return mBookList;
+        if(bookViewModel.getAllStocks().getValue() != null){
+            listSize = bookViewModel.getAllStocks().getValue().size();
+        }
+
+        for(int i = 0; i < listSize; i++){
+            mBooks.add(bookViewModel.getAllStocks().getValue().get(i));
+        }
+        return mBooks;
     }
 
 
     // TODO: Complete the method
-    private Book getStock(String symbol){
+    public Book getStock(String symbol){
+        List<Book> mBooks = getAllStocks();
+        int size = mBooks.size();
+        for(int i = 0; i < size; i++){
+            if (mBooks.get(i).getSymbol().equals(symbol)){
+                return (mBooks.get(i));
+            }
+        }
         return null;
     }
 
@@ -120,7 +119,9 @@ public class StockService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate() Registering BroadcastReceiver = " + mStockBroadcastReceiver.TAG);
-        registerReceiver(mStockBroadcastReceiver, mIntentFilter);
+        //registerReceiver(mStockBroadcastReceiver, mIntentFilter);
+        //this.registerReceiver(mStockBroadcastReceiver, mIntentFilter);
+        //LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mStockBroadcastReceiver, mIntentFilter);
     }
 
     @Override
@@ -142,7 +143,8 @@ public class StockService extends Service {
         isRunning = false;
         Log.d(TAG, "StockService onDestroy() Unregistering BroadcastReceiver = " +
                 mStockBroadcastReceiver.TAG + " and isRunning = " + isRunning);
-        unregisterReceiver(mStockBroadcastReceiver);
+        //unregisterReceiver(mStockBroadcastReceiver);
+        //LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mStockBroadcastReceiver);
     }
 
     @Override
@@ -197,11 +199,4 @@ public class StockService extends Service {
         return mBinder;
     }
 
-//    public class LocalBinder extends Binder {
-//        public StockService getService(){
-//            return StockService.this;
-//        }
-//    }
-
-    //private final IBinder mBinder = new LocalBinder();
 }

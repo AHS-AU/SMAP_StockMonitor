@@ -20,6 +20,9 @@ public final class SharedConstants {
 
     // Intent Extras
     public static final String EXTRA_STOCK = "EXTRA_STOCK";
+    public static final String EXTRA_SYMBOL = "EXTRA_SYMBOL";
+    public static final String EXTRA_PURCHASE_PRICE = "EXTRA_PURCHASE_PRICE";
+    public static final String EXTRA_NUMBER_OF_STOCKS = "EXTRA_NUMBER_OF_STOCKS";
 
     // Intent Filter
     public static final String FILTER_DATA_SINGLE_UPDATE = "FILTER_DATA_SINGLE_UPDATE";

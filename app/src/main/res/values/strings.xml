@@ -19,6 +19,12 @@
     <string name="DetailsActionbar">Stock Details</string>
     <string name="EditActionbar">Edit your stocks</string>
     <string name="btnAddStock" translatable="false">+</string>
+    <string name="addStockSymbol">Stock Symbol</string>
+    <string name="addPurchasePrice">Purchase Price</string>
+    <string name="addNumOfStocks">Number of Stocks</string>
+    <string name="addTitle">Add a Stock from the API</string>
+    <string name="addPositive" translatable="false">OK</string>
+
 
 
 </resources>

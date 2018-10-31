@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -25,8 +26,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Room.Book.Book;
+import com.example.admin.stockmonitor.Room.Book.BookDao;
+import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Room.Book.BookDatabase_Impl;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
+import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
@@ -41,7 +46,7 @@ import java.util.List;
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 import static com.google.gson.reflect.TypeToken.get;
 
-public class OverviewActivity extends AppCompatActivity {
+public class OverviewActivity extends AppCompatActivity implements AddStockDialog.AddStockDialogListener {
     private static final String TAG = OverviewActivity.class.getSimpleName();
     // UI Variables
     private ListView lvStocks;
@@ -49,7 +54,6 @@ public class OverviewActivity extends AppCompatActivity {
 
 
     // Variables
-    private RequestQueue mQueue;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private boolean isServiceBound = false;
     private Book mStock;
@@ -72,6 +76,8 @@ public class OverviewActivity extends AppCompatActivity {
             mStockService = null;
             Log.d(TAG, "Service Disconnected from OverviewActivity");
         }
+
+
     };
 
     @Override
@@ -114,12 +120,19 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        btnAddStock.setOnClickListener(v -> addStock());
+        btnAddStock.setOnClickListener(v -> openAddStockDialog());
+
+        // Init Service & its necessary data
+        Intent mStockServiceIntent = new Intent(this, StockService.class);
+        startService(mStockServiceIntent);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
 
     }
 
-    public void addStock() {
-
+    public void openAddStockDialog(){
+        AddStockDialog dialog = new AddStockDialog();
+        dialog.setCancelable(false);
+        dialog.show(getSupportFragmentManager(), dialog.getTag());
     }
 
     /**
@@ -162,22 +175,23 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart() Registering Receivers");
-        Intent mStockServiceIntent = new Intent(this, StockService.class);
-        startService(mStockServiceIntent);
-        mIntent = new Intent(FILTER_DATA_SINGLE_UPDATE);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
+//        Intent mStockServiceIntent = new Intent(this, StockService.class);
+//        startService(mStockServiceIntent);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
+//        mIntent = new Intent(FILTER_DATA_SINGLE_UPDATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop() Unregistering Receivers");
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mStockBroadcastReceiver);
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(mStockBroadcastReceiver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mStockBroadcastReceiver);
 
 //        if (mServiceConnection != null && isServiceBound){
 //            Log.d(TAG, "onDestroy() Service Dead");
@@ -206,7 +220,39 @@ public class OverviewActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
+    /**
+     * See AddStockDilog
+     * @param symbol : user input symbol
+     * @param purchasePrice : user input purchase price
+     * @param numberOfStocks : user input number of stocks
+     */
+    @Override
+    public void getStockInfo(String symbol, String purchasePrice, int numberOfStocks) {
+        Log.d(TAG,"getStockInfo(), symbol = " + symbol + ", purchasePrice = " + purchasePrice + ", numOfStocks = " + numberOfStocks);
+        Book mStock = mStockService.getStock(symbol);
+        String mSymbol;
+        if (mStock != null){
+            mSymbol = mStock.getSymbol();
+        } else {
+            mSymbol = "lmaowhocaresaboutthistextitiscompletelyirrelevantsowhywouldievenbothertonameit";
+        }
+
+        if (mSymbol.equals(symbol)){
+            Log.d(TAG, "getStockInfo() Stock(" + mSymbol + ") already exists in the Database");
+            Toast.makeText(OverviewActivity.this, "Stock: " + mSymbol + " already exists", Toast.LENGTH_SHORT).show();
+        }else if (symbol.equals("ERROR")){
+            Toast.makeText(OverviewActivity.this, "Error: All inputs required", Toast.LENGTH_SHORT).show();
+        } else{
+            Intent intent = new Intent(FILTER_DATA_SINGLE_UPDATE);
+            intent.putExtra(EXTRA_SYMBOL, symbol );
+            intent.putExtra(EXTRA_PURCHASE_PRICE, purchasePrice);
+            intent.putExtra(EXTRA_NUMBER_OF_STOCKS, numberOfStocks);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            Log.d(TAG, "getStockInfo() Stock(" + symbol + ") will be added to the Database");
+        }
+    }
+
+    //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
 //        super.onSaveInstanceState(outState);
 //        outState.putSerializable(SAVE_STOCK,mStock);
@@ -218,5 +264,6 @@ public class OverviewActivity extends AppCompatActivity {
 //        mStock = (Stock)savedInstanceState.getSerializable(SAVE_STOCK);
 //        updateUI();
 //    }
+
 
 }

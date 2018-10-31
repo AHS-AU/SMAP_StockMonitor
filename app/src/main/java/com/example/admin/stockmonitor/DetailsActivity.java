@@ -2,7 +2,9 @@ package com.example.admin.stockmonitor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -10,6 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.admin.stockmonitor.Room.Book.Book;
+import com.example.admin.stockmonitor.Room.Book.BookDao;
+import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
+import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
@@ -27,6 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Variables
     private Book mStock;
+    private StockBroadcastReceiver mStockBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +89,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void deleteStock(Book stock){
         Log.d(TAG, "DELETE STOCK?");
-        // TODO: Delete the stock from DB
+        bookViewModel.delete(stock);
+        setResult(RESULT_CANCELED);
+        finish();
 
     }
 
@@ -97,6 +106,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+
     /**********************************************************************************************
      *                                    Override Functions                                      *
      *********************************************************************************************/
@@ -109,6 +119,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
