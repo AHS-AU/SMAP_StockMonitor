@@ -14,6 +14,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
+import com.example.admin.stockmonitor.Room.Book.BookDao;
+import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
@@ -35,22 +37,23 @@ public class StockService extends Service {
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
 
+
+    /**
+     * THIS FUNCTION MUST RUN IN AN AsyncTask WHENEVER USED!
+     * @return : A List of Stocks from Database
+     */
     public List<Book> getAllStocks(){
-        int listSize = 0;
-        List<Book> mBooks = new ArrayList<>();
-
-        if(bookViewModel.getAllStocks().getValue() != null){
-            listSize = bookViewModel.getAllStocks().getValue().size();
-        }
-
-        for(int i = 0; i < listSize; i++){
-            mBooks.add(bookViewModel.getAllStocks().getValue().get(i));
-        }
-        return mBooks;
+        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
+        BookDao mBookDao = db.bookDao();
+        return mBookDao.getAllStocksOnStart();
     }
 
 
-    // TODO: Complete the method
+    /**
+     * THIS FUNCTION MUST RUN IN AN AsyncTask WHENEVER USED!
+     * @param symbol : Book Object's stock symbol
+     * @return : A single Stock from Book Object
+     */
     public Book getStock(String symbol){
         List<Book> mBooks = getAllStocks();
         int size = mBooks.size();
@@ -109,6 +112,10 @@ public class StockService extends Service {
         public StockService getService(){
             return StockService.this;
         }
+    }
+
+    public Context getAppContext(){
+        return getApplicationContext();
     }
 
 

@@ -67,7 +67,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
 
     private StockService mStockService;
 
-
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mStockService = ((StockService.LocalBinder)service).getService();
@@ -137,27 +136,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         dialog.setCancelable(false);
         dialog.show(getSupportFragmentManager(), dialog.getTag());
     }
-//        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
-//        BookDao dao = db.bookDao();
-//        Book buuk = new Book("1","2","3","4","5","6","7","8",9);
-//        //dao.insert(buuk);
-//        new UpdateDbAsyncTask(dao,buuk).execute();
-
-//    private static class UpdateDbAsyncTask extends AsyncTask<Void, Void, Void>{
-//        private BookDao bookDao;
-//        private Book book;
-//
-//        UpdateDbAsyncTask(BookDao mBookDao, Book mBook){
-//            bookDao = mBookDao;
-//            book = mBook;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            bookDao.insert(book);
-//            return null;
-//        }
-//    }
 
     /**
      * Start Details Activity when item from Listview is clicked
@@ -247,7 +225,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     }
 
     /**
-     * See AddStockDilog
+     * See AddStockDialog
      * @param symbol : user input symbol
      * @param purchasePrice : user input purchase price
      * @param numberOfStocks : user input number of stocks

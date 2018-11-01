@@ -49,6 +49,7 @@ public abstract class BookDatabase extends RoomDatabase {
                     BookDatabase.class, "book_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
+                    .allowMainThreadQueries()   // I am a rebel, this is what you get for not allowing us LiveData / ViewModel
                     .build();
         }
         return instance;
