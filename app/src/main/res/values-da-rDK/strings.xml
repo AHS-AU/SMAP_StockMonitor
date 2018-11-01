@@ -23,4 +23,5 @@
     <string name="addPurchasePrice">Købt Pris</string>
     <string name="addStockSymbol">Aktie Symbol</string>
     <string name="addTitle">Tilføj en Aktie fra API</string>
+    <string name="refresh">Opdater</string>
 </resources>

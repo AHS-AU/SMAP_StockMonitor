@@ -40,7 +40,7 @@ public class BookAsyncTasks {
     }
 
     public void UpdateAllBooks(BookDao bookDao, RequestQueue queue){
-        new UpdateManyAllBooks(bookDao, queue).execute();
+        new UpdateAllBooksAsyncTask(bookDao, queue).execute();
     }
 
 
@@ -83,11 +83,11 @@ public class BookAsyncTasks {
         }
     }
 
-    private static class UpdateManyAllBooks extends AsyncTask<Void, Void, Void>{
+    private static class UpdateAllBooksAsyncTask extends AsyncTask<Void, Void, Void>{
         private BookDao mBookDao;
         private RequestQueue mQueue;
 
-        UpdateManyAllBooks(BookDao bookDao, RequestQueue queue){
+        UpdateAllBooksAsyncTask(BookDao bookDao, RequestQueue queue){
             this.mBookDao = bookDao;
             this.mQueue = queue;
 

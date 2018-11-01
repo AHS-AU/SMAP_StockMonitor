@@ -24,6 +24,7 @@
     <string name="addNumOfStocks">Number of Stocks</string>
     <string name="addTitle">Add a Stock from the API</string>
     <string name="addPositive" translatable="false">OK</string>
+    <string name="refresh">Refresh</string>
 
 
 

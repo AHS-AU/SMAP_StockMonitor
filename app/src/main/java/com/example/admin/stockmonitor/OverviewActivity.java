@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -60,6 +63,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     private boolean isServiceBound = false;
     private Book mStock;
     private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+    private boolean isRefreshing = false;
 
     //private BookViewModel bookViewModel;
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
@@ -86,6 +90,8 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
+
 
         // Set up UI variables
         lvStocks = findViewById(R.id.lvStocks);
@@ -147,6 +153,25 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         mStockBundle.putSerializable(EXTRA_STOCK, vStockItem);
         intDetailsActivity.putExtras(mStockBundle);
         startActivityForResult(intDetailsActivity, REQ_OVERVIEW_UPDATE);
+    }
+
+    private void refreshStocks(final boolean enable){
+        if(enable){
+            Handler mHandler = new Handler();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isRefreshing = false;
+                    invalidateOptionsMenu();
+                }
+            }, 1000);   // This delay should be fine for about 50 stocks, it's lazy implementation ;)
+            isRefreshing = true;
+            Intent intent = new Intent(FILTER_DATA_UPDATE);
+            LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(intent);
+        } else{
+            isRefreshing = false;
+        }
+        invalidateOptionsMenu();
     }
 
 
@@ -254,6 +279,29 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             Log.d(TAG, "getStockInfo() Stock(" + symbol + ") will be added to the Database");
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_refresh);
+        if(!isRefreshing){
+            menu.findItem(R.id.menu_refresh).setActionView(null);
+            menu.findItem(R.id.menu_refresh).setVisible(true);
+        } else{
+            menu.findItem(R.id.menu_refresh).setActionView(R.layout.actionbar_refresh);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_refresh:
+                refreshStocks(true);
+                return true;
+        }
+        return true;
     }
 
     //    @Override
