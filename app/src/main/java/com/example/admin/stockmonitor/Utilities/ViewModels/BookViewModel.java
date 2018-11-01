@@ -3,7 +3,6 @@ package com.example.admin.stockmonitor.Utilities.ViewModels;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 
 import com.example.admin.stockmonitor.Room.Book.Book;
