@@ -1,22 +1,21 @@
 package com.example.admin.stockmonitor.Utilities.Broadcaster;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.Room.Book.Book;
+import com.example.admin.stockmonitor.Room.Book.BookDao;
+import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
-import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,103 +24,78 @@ import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 public final class StockBroadcastReceiver extends BroadcastReceiver {
     public static final String TAG = "StockBroadcastReceiver";
     private RequestQueue mQueue;
+    private BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if(FILTER_DATA_SINGLE_UPDATE.equals(action)){
             Log.d(TAG, FILTER_DATA_SINGLE_UPDATE);
-            String mSymbol = intent.getStringExtra(EXTRA_SYMBOL);
-            String mPurchasePrice = intent.getStringExtra(EXTRA_PURCHASE_PRICE);
-            int mNumberOfStocks = intent.getIntExtra(EXTRA_NUMBER_OF_STOCKS, 1);
-
-            SharedConstants sc = new SharedConstants();
-            String url = sc.getApiUrl(mSymbol);
-            if (mQueue == null){
-                Log.d(TAG, "RequestQueue mQueue is null, requesting new queue");
-                mQueue = Volley.newRequestQueue(context);
-            }
-
-            JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                JSONObject jsonObject = response.getJSONObject("quote");
-                                String companyName = jsonObject.getString("companyName");
-                                String symbol = jsonObject.getString("symbol"); // yes even symbol to validate correct
-                                String primaryExchange = jsonObject.getString("primaryExchange");
-                                String latestPrice = jsonObject.getString("latestPrice");
-                                String latestUpdate = jsonObject.getString("latestUpdate");
-                                String change = jsonObject.getString("change");
-                                String sector = jsonObject.getString("sector");
-                                Book addBook = new Book(companyName,symbol,primaryExchange,
-                                        latestPrice,latestUpdate,change,sector,
-                                        mPurchasePrice,mNumberOfStocks);
-                                bookViewModel.insert(addBook);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, "onErrorResponse() in " + action + " see Stack Trace for more info");
-                    error.printStackTrace();
-                }
-            });
-            mQueue.add(mRequest);
+            addStock(context,intent,action);
 
         }else if (FILTER_DATA_UPDATE.equals(action)){
             Log.d(TAG, FILTER_DATA_UPDATE);
-            int bookSize = 0;
-            if (bookViewModel.getAllStocks().getValue() != null){
-                bookSize = bookViewModel.getAllStocks().getValue().size();
+
+            BookDatabase db = BookDatabase.getInstance(context);
+            BookDao mBookDao = db.bookDao();
+            if (mQueue == null){
+                Log.d(TAG, "mQueue is null, requesting new Volley RequestQueue");
+                mQueue = Volley.newRequestQueue(context);
             }
-
-            for (int i = 0; i < bookSize; i++){
-                if (bookViewModel.getAllStocks().getValue() != null){
-                    Book updateBook = bookViewModel.getAllStocks().getValue().get(i);
-                    String symbol = updateBook.getSymbol();
-                    SharedConstants sc = new SharedConstants();
-                    String url = sc.getApiUrl(symbol);
-
-                    if (mQueue == null) {
-                        Log.d(TAG, "RequestQueue mQueue is null, requesting new queue");
-                        mQueue = Volley.newRequestQueue(context);
-                    }
-                    JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        JSONObject jsonObject = response.getJSONObject("quote");
-                                        String latestPrice = jsonObject.getString("latestPrice");
-                                        String latestUpdate = jsonObject.getString("latestUpdate");
-                                        String change = jsonObject.getString("change");
-                                        String sector = jsonObject.getString("sector");
-                                        updateBook.setLatestPrice(latestPrice);
-                                        updateBook.setLatestUpdate(latestUpdate);
-                                        updateBook.setChange(change);
-                                        updateBook.setSector(sector);
-                                        bookViewModel.update(updateBook);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d(TAG, "onErrorResponse() in " + action + " see Stack Trace for more info");
-                            error.printStackTrace();
-                        }
-                    });
-                    mQueue.add(mRequest);
-
-
-                }
-            }
+            mBookAsyncTasks.UpdateAllBooks(mBookDao,mQueue);
 
         }
 
+    }
+
+    /**
+     * Convenient Method to add stock into DB
+     * @param context : Context
+     * @param intent : Intent
+     * @param action : Filter Action
+     */
+    private void addStock(Context context, Intent intent, String action){
+        String mSymbol = intent.getStringExtra(EXTRA_SYMBOL);
+        String mPurchasePrice = intent.getStringExtra(EXTRA_PURCHASE_PRICE);
+        int mNumberOfStocks = intent.getIntExtra(EXTRA_NUMBER_OF_STOCKS, 1);
+
+        SharedConstants sc = new SharedConstants();
+        String url = sc.getApiUrl(mSymbol);
+        if (mQueue == null){
+            Log.d(TAG, "RequestQueue mQueue is null, requesting new queue");
+            mQueue = Volley.newRequestQueue(context);
+        }
+
+        JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject("quote");
+                            String companyName = jsonObject.getString("companyName");
+                            String symbol = jsonObject.getString("symbol"); // yes even symbol to validate correct
+                            String primaryExchange = jsonObject.getString("primaryExchange");
+                            String latestPrice = jsonObject.getString("latestPrice");
+                            String latestUpdate = jsonObject.getString("latestUpdate");
+                            String change = jsonObject.getString("change");
+                            String sector = jsonObject.getString("sector");
+                            Book addBook = new Book(companyName,symbol,primaryExchange,
+                                    latestPrice,latestUpdate,change,sector,
+                                    mPurchasePrice,mNumberOfStocks);
+                            BookDatabase db = BookDatabase.getInstance(context);
+                            BookDao mBookDao = db.bookDao();
+                            mBookAsyncTasks.InsertBook(mBookDao, addBook);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse() in " + action + " see Stack Trace for more info");
+                error.printStackTrace();
+            }
+        });
+        mQueue.add(mRequest);
     }
 }

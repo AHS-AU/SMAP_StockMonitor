@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
@@ -34,6 +35,7 @@ public class DetailsActivity extends AppCompatActivity {
     // Variables
     private Book mStock;
     private StockBroadcastReceiver mStockBroadcastReceiver;
+    private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void deleteStock(Book stock){
         Log.d(TAG, "DELETE STOCK?");
-        bookViewModel.delete(stock);
+        BookDatabase db = BookDatabase.getInstance(getApplication());
+        BookDao mBookDao = db.bookDao();
+        mBookAsyncTasks.DeleteBook(mBookDao,stock);
         setResult(RESULT_CANCELED);
         finish();
 

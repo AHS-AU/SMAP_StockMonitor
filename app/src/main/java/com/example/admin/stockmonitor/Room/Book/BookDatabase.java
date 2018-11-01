@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
 
 import org.json.JSONException;
@@ -29,6 +30,7 @@ public abstract class BookDatabase extends RoomDatabase {
     public static final String TAG = "BookDatabase";
     public abstract BookDao bookDao();
     private static RequestQueue mQueue;
+    private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
 
     private static BookDatabase instance;
     private static Context mContext;
@@ -87,6 +89,7 @@ public abstract class BookDatabase extends RoomDatabase {
         }
     }
 
+
     /**
      * Updates the DB when it opens
      * @param bookDao : BookDao object
@@ -117,7 +120,9 @@ public abstract class BookDatabase extends RoomDatabase {
                                     updateBook.setLatestUpdate(latestUpdate);
                                     updateBook.setChange(change);
                                     updateBook.setSector(sector);
-                                    bookViewModel.update(updateBook);
+                                    //bookViewModel.update(updateBook);
+                                    //new UpdateBookAsyncTask(bookDao).execute(updateBook);
+                                    mBookAsyncTasks.UpdateBook(bookDao,updateBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -187,8 +192,9 @@ public abstract class BookDatabase extends RoomDatabase {
                                     // purchasePrice = lastestPrice because start up.
                                     Book mBook = new Book(companyName,symbol,primaryExchange,
                                             latestPrice,latestUpdate,change,sector,latestPrice, 1);
-                                    bookViewModel.insert(mBook);
+                                    //bookViewModel.insert(mBook);
                                     //vBookDao.insert(mBook);
+                                    mBookAsyncTasks.InsertBook(vBookDao,mBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

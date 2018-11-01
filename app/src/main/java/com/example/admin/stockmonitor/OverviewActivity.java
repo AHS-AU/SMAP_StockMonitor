@@ -29,7 +29,9 @@ import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase_Impl;
+import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
+import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
@@ -57,6 +59,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private boolean isServiceBound = false;
     private Book mStock;
+    private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
 
     //private BookViewModel bookViewModel;
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
@@ -134,6 +137,27 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         dialog.setCancelable(false);
         dialog.show(getSupportFragmentManager(), dialog.getTag());
     }
+//        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
+//        BookDao dao = db.bookDao();
+//        Book buuk = new Book("1","2","3","4","5","6","7","8",9);
+//        //dao.insert(buuk);
+//        new UpdateDbAsyncTask(dao,buuk).execute();
+
+//    private static class UpdateDbAsyncTask extends AsyncTask<Void, Void, Void>{
+//        private BookDao bookDao;
+//        private Book book;
+//
+//        UpdateDbAsyncTask(BookDao mBookDao, Book mBook){
+//            bookDao = mBookDao;
+//            book = mBook;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            bookDao.insert(book);
+//            return null;
+//        }
+//    }
 
     /**
      * Start Details Activity when item from Listview is clicked
@@ -211,8 +235,10 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             case REQ_OVERVIEW_UPDATE:
                 Log.d(TAG, "onActivityResult() requestCode = REQ_OVERVIEW_UPDATE");
                 mStock = (Book)data.getSerializableExtra(EXTRA_STOCK);
-                Log.d(TAG, "tmpDebug: mStock " + mStock.getNumberOfStocks());
-                bookViewModel.update(mStock);
+                BookDatabase db = BookDatabase.getInstance(getApplication());
+                BookDao mBookDao = db.bookDao();
+                mBookAsyncTasks.UpdateBook(mBookDao, mStock);
+
                 break;
             default:
                 Log.d(TAG, "onActivityResult() default case");
@@ -234,7 +260,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         if (mStock != null){
             mSymbol = mStock.getSymbol();
         } else {
-            mSymbol = "lmaowhocaresaboutthistextitiscompletelyirrelevantsowhywouldievenbothertonameit";
+            mSymbol = "JustSomeRandomString";
         }
 
         if (mSymbol.equals(symbol)){
