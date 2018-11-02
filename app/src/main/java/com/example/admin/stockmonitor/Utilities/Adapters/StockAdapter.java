@@ -33,6 +33,11 @@ public class StockAdapter extends BaseAdapter {
         this.mBookList = books;
     }
 
+    public void setBookList(List<Book> books){
+        this.mBookList = books;
+    }
+
+
     /**********************************************************************************************
      *                                   Override Functions                                       *
      *********************************************************************************************/
@@ -46,6 +51,9 @@ public class StockAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position){
+        if (mBookList != null){
+            return mBookList.get(position).getUid();
+        }
         return 0;
     }
 

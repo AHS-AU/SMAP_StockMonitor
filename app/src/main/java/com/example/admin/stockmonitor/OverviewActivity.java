@@ -22,34 +22,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
-import com.example.admin.stockmonitor.Room.Book.BookDatabase_Impl;
-import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
 import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
-import com.example.admin.stockmonitor.Utilities.SharedConstants;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
-import com.example.admin.stockmonitor.Utilities.ViewModels.BookViewModel;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
-import static com.google.gson.reflect.TypeToken.get;
 
 public class OverviewActivity extends AppCompatActivity implements AddStockDialog.AddStockDialogListener {
     private static final String TAG = OverviewActivity.class.getSimpleName();
@@ -64,16 +48,23 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     private Book mStock;
     private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
     private boolean isRefreshing = false;
-
-    //private BookViewModel bookViewModel;
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
     private Intent mIntent;
-
     private StockService mStockService;
+    private StockAdapter mStockAdapter = new StockAdapter(OverviewActivity.this, null);
+
+    public void notifyStockAdapterChanges(){
+        List<Book> books = mStockService.getAllStocks();
+        mStockAdapter.setBookList(books);
+        mStockAdapter.notifyDataSetChanged();
+    }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mStockService = ((StockService.LocalBinder)service).getService();
+            List<Book> books = mStockService.getAllStocks();
+            mStockAdapter.setBookList(books);
+            lvStocks.setAdapter(mStockAdapter);
             Log.d(TAG, "Service Connected to OverviewActivity");
 
         }
@@ -82,6 +73,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             mStockService = null;
             Log.d(TAG, "Service Disconnected from OverviewActivity");
         }
+
 
 
     };
@@ -99,14 +91,14 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
 
         // TODO Replace these with dynamic from Room Persistance DB
 
-        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
-        bookViewModel.getAllStocks().observe(this, new Observer<List<Book>>() {
-            @Override
-            public void onChanged(@Nullable List<Book> books) {
-                // Set up the Custom Adapter StockAdapter that creates the UI from list_of_stocks.xml
-                lvStocks.setAdapter(new StockAdapter(OverviewActivity.this, books));
-            }
-        });
+//        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+//        bookViewModel.getAllStocks().observe(this, new Observer<List<Book>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Book> books) {
+//                // Set up the Custom Adapter StockAdapter that creates the UI from list_of_stocks.xml
+//                lvStocks.setAdapter(new StockAdapter(OverviewActivity.this, books));
+//            }
+//        });
 
         // Set up Service Intent
 //        Intent mStockServiceIntent = new Intent(this, StockService.class);

@@ -11,9 +11,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
 import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
 
@@ -25,6 +27,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
     public static final String TAG = "StockBroadcastReceiver";
     private RequestQueue mQueue;
     private BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -43,7 +46,6 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                 mQueue = Volley.newRequestQueue(context);
             }
             mBookAsyncTasks.UpdateAllBooks(mBookDao,mQueue);
-
         }
 
     }
