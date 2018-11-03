@@ -14,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
-import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
 
 import org.json.JSONException;
@@ -25,7 +25,7 @@ import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 public final class StockBroadcastReceiver extends BroadcastReceiver {
     public static final String TAG = "StockBroadcastReceiver";
     private RequestQueue mQueue;
-    private BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+    private BookRepository mBookRepository = new BookRepository();
 
 
     @Override
@@ -44,7 +44,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                 Log.d(TAG, "mQueue is null, requesting new Volley RequestQueue");
                 mQueue = Volley.newRequestQueue(context);
             }
-            mBookAsyncTasks.UpdateAllBooks(mBookDao,mQueue);
+            mBookRepository.UpdateAllBooks(mBookDao,mQueue);
         }
 
     }
@@ -85,7 +85,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                                     mPurchasePrice,mNumberOfStocks);
                             BookDatabase db = BookDatabase.getInstance(context);
                             BookDao mBookDao = db.bookDao();
-                            mBookAsyncTasks.InsertBook(mBookDao, addBook);
+                            mBookRepository.InsertBook(mBookDao, addBook);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

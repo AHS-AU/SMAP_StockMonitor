@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
-import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
@@ -31,7 +31,7 @@ public class DetailsActivity extends AppCompatActivity {
     // Variables
     private Book mStock;
     private StockBroadcastReceiver mStockBroadcastReceiver;
-    private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+    private static BookRepository mBookRepository = new BookRepository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class DetailsActivity extends AppCompatActivity {
         Log.d(TAG, "DELETE STOCK?");
         BookDatabase db = BookDatabase.getInstance(getApplication());
         BookDao mBookDao = db.bookDao();
-        mBookAsyncTasks.DeleteBook(mBookDao,stock);
+        mBookRepository.DeleteBook(mBookDao,stock);
         setResult(RESULT_CANCELED);
         finish();
 

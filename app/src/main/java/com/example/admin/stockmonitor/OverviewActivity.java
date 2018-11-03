@@ -24,7 +24,7 @@ import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
-import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
@@ -44,7 +44,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private boolean isServiceBound = false;
     private Book mStock;
-    private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+    private static BookRepository mBookRepository = new BookRepository();
     private boolean isRefreshing = false;
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
     private StockService mStockService;
@@ -172,7 +172,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     }
 
     public void initDb(){
-        mBookAsyncTasks.InitDatabase(getApplicationContext());
+        mBookRepository.InitDatabase(getApplicationContext());
     }
 
 
@@ -241,7 +241,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                 mStock = (Book)data.getSerializableExtra(EXTRA_STOCK);
                 BookDatabase db = BookDatabase.getInstance(getApplication());
                 BookDao mBookDao = db.bookDao();
-                mBookAsyncTasks.UpdateBook(mBookDao, mStock);
+                mBookRepository.UpdateBook(mBookDao, mStock);
 
                 break;
             default:

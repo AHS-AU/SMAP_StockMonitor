@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
-import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
@@ -40,7 +40,7 @@ public class StockService extends Service {
      * @return : A List of Stocks from Database
      */
     public List<Book> getAllStocks(){
-        BookAsyncTasks task = new BookAsyncTasks();
+        BookRepository task = new BookRepository();
         return task.GetAllBooks(getApplicationContext());
 //        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
 //        BookDao mBookDao = db.bookDao();

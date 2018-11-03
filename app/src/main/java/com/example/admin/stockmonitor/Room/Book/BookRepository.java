@@ -17,9 +17,9 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class BookAsyncTasks {
-    private static final String TAG = "BookAsyncTasks";
-    public BookAsyncTasks(){
+public class BookRepository {
+    private static final String TAG = "BookRepository";
+    public BookRepository(){
 
     }
 
@@ -162,7 +162,7 @@ public class BookAsyncTasks {
                                     mBook.setLatestUpdate(latestUpdate);
                                     mBook.setChange(change);
                                     mBook.setSector(sector);
-                                    BookAsyncTasks mBookAsyncTask = new BookAsyncTasks();
+                                    BookRepository mBookAsyncTask = new BookRepository();
                                     mBookAsyncTask.UpdateBook(mBookDao, mBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();

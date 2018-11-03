@@ -27,7 +27,7 @@ public abstract class BookDatabase extends RoomDatabase {
     public static final String TAG = "BookDatabase";
     public abstract BookDao bookDao();
     private static RequestQueue mQueue;
-    private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
+    private static BookRepository mBookRepository = new BookRepository();
 
     private static BookDatabase instance;
     private static Context mContext;
@@ -122,7 +122,7 @@ public abstract class BookDatabase extends RoomDatabase {
                                     updateBook.setSector(sector);
                                     //bookViewModel.update(updateBook);
                                     //new UpdateBookAsyncTask(bookDao).execute(updateBook);
-                                    mBookAsyncTasks.UpdateBook(bookDao,updateBook);
+                                    mBookRepository.UpdateBook(bookDao,updateBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -195,7 +195,7 @@ public abstract class BookDatabase extends RoomDatabase {
                                             latestPrice,latestUpdate,change,sector,latestPrice, 1);
                                     //bookViewModel.insert(mBook);
                                     //vBookDao.insert(mBook);
-                                    mBookAsyncTasks.InsertBook(vBookDao,mBook);
+                                    mBookRepository.InsertBook(vBookDao,mBook);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
