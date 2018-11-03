@@ -2,7 +2,6 @@ package com.example.admin.stockmonitor.Utilities.Services;
 
 import android.app.Notification;
 import android.app.Service;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,14 +13,11 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
-import com.example.admin.stockmonitor.Room.Book.BookDao;
-import com.example.admin.stockmonitor.Room.Book.BookDatabase;
-import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

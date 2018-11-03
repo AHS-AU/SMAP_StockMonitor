@@ -11,12 +11,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
-import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
-import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
 
 import org.json.JSONException;

@@ -1,18 +1,14 @@
 package com.example.admin.stockmonitor;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,12 +24,11 @@ import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
-import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
-import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 

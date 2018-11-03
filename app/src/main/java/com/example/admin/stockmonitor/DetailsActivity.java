@@ -1,10 +1,7 @@
 package com.example.admin.stockmonitor;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,9 +11,8 @@ import android.widget.TextView;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
-import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
+import com.example.admin.stockmonitor.Room.Book.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
-import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 

@@ -1,20 +1,15 @@
-package com.example.admin.stockmonitor.Utilities.AsyncTasks;
+package com.example.admin.stockmonitor.Room.Book;
 
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.admin.stockmonitor.Room.Book.Book;
-import com.example.admin.stockmonitor.Room.Book.BookDao;
-import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
-import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
