@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -86,6 +87,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                             BookDatabase db = BookDatabase.getInstance(context);
                             BookDao mBookDao = db.bookDao();
                             mBookRepository.InsertBook(mBookDao, addBook);
+                            Toast.makeText(context,"Adding " + mSymbol + " to the Database", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -93,6 +95,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context,"Could not add stock with symbol: " + mSymbol, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onErrorResponse() in " + action + " see Stack Trace for more info");
                 error.printStackTrace();
             }

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -29,6 +30,8 @@ import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiv
 import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
+
+import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
@@ -54,34 +57,31 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            notifyStockAdapterChanges();
+            notifyStockAdapterChanges(mStockService.getAllStocks());
         }
     };
 
 
-    public void notifyStockAdapterChanges(){
+    public void notifyStockAdapterChanges(List<Book> books){
+        mStockAdapter.setBookList(books);
+        mStockAdapter.notifyDataSetChanged();
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mStockService = ((StockService.LocalBinder)service).getService();
 
+            mStockAdapter.setBookList(mStockService.getAllStocks());
+            mStockAdapter.notifyDataSetChanged();
+            // Handler with delay in case of slow connection.
             Handler mHandler = new Handler();
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d(TAG, "tmpDebug: Size = " + mStockService.getAllStocks().size());
-                    for(int i = 0; i < mStockService.getAllStocks().size(); i++){
-                        Log.d(TAG, "tmpDebug: Book["+i+"] = " + mStockService.getAllStocks().get(i).getSymbol() );
-                    }
                     mStockAdapter.setBookList(mStockService.getAllStocks());
                     mStockAdapter.notifyDataSetChanged();
                 }
-            }, 1000);   // This delay should be fine for about 50 stocks, it's lazy implementation ;)
-//            mStockAdapter.setBookList(mStockService.getAllStocks());
-//            mStockAdapter.notifyDataSetChanged();
-//            lvStocks.setAdapter(mStockAdapter);
-            //notifyStockAdapterChanges();
+            }, 1000);
             IntentFilter filter = new IntentFilter(FILTER_DB_UI_CHANGES);
             LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onDatabaseUpdateReceiver, filter);
             Log.d(TAG, "Service Connected to OverviewActivity");
@@ -138,6 +138,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         AddStockDialog dialog = new AddStockDialog();
         dialog.setCancelable(false);
         dialog.show(getSupportFragmentManager(), dialog.getTag());
+
     }
 
     /**
@@ -158,13 +159,13 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(new Intent(FILTER_DB_UI_CHANGES));
                     isRefreshing = false;
                     invalidateOptionsMenu();
                 }
             }, 1000);   // This delay should be fine for about 50 stocks, it's lazy implementation ;)
             isRefreshing = true;
-            Intent intent = new Intent(FILTER_DB_UI_CHANGES);
-            LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(new Intent(FILTER_DATA_UPDATE));
         } else{
             isRefreshing = false;
         }
@@ -260,11 +261,12 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     public void getStockInfo(String symbol, String purchasePrice, int numberOfStocks) {
         Log.d(TAG,"getStockInfo(), symbol = " + symbol + ", purchasePrice = " + purchasePrice + ", numOfStocks = " + numberOfStocks);
         Book mStock = mStockService.getStock(symbol);
+        Log.d(TAG, "getStockInfo() after getStock");
         String mSymbol;
         if (mStock != null){
             mSymbol = mStock.getSymbol();
         } else {
-            mSymbol = "JustSomeRandomString";
+            mSymbol = "ERROR_NULL";
         }
 
         if (mSymbol.equals(symbol)){
@@ -278,7 +280,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             intent.putExtra(EXTRA_PURCHASE_PRICE, purchasePrice);
             intent.putExtra(EXTRA_NUMBER_OF_STOCKS, numberOfStocks);
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-            Log.d(TAG, "getStockInfo() Stock(" + symbol + ") will be added to the Database");
+            Log.d(TAG, "getStockInfo() Stock(" + symbol + ") sent to Broadcastreceiver with action = " + intent.getAction());
         }
     }
 

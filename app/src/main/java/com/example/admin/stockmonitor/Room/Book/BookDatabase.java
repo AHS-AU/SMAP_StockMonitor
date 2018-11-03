@@ -46,7 +46,6 @@ public abstract class BookDatabase extends RoomDatabase {
                     BookDatabase.class, "book_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
-                    //.allowMainThreadQueries()
                     .build();
         }
         return instance;
@@ -130,6 +129,7 @@ public abstract class BookDatabase extends RoomDatabase {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "updateDbOnOpen() Could not reach API: " + url);
                         error.printStackTrace();
                     }
                 });
@@ -177,7 +177,8 @@ public abstract class BookDatabase extends RoomDatabase {
             urlArray.add(sc.getApiUrl("EBAY"));
 
             for (int i = 0; i < urlArray.size(); i++){
-                JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, urlArray.get(i), null,
+                String url = urlArray.get(i);
+                JsonObjectRequest mRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -203,6 +204,7 @@ public abstract class BookDatabase extends RoomDatabase {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "updateDbOnOpen() Could not reach API: " + url);
                         error.printStackTrace();
                     }
                 });

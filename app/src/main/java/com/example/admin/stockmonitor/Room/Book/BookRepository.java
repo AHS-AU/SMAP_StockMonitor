@@ -3,12 +3,15 @@ package com.example.admin.stockmonitor.Room.Book;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.Utilities.SharedConstants;
 
 import org.json.JSONException;
@@ -17,6 +20,11 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * This class is a "middle-ground" between the "DB Client" & DAO.
+ * It is not a part of the Room Database Architecture.
+ * In basic view, it can be seen as a handler that controls the AsyncTasks to access the Database.
+ */
 public class BookRepository {
     private static final String TAG = "BookRepository";
     public BookRepository(){
@@ -57,11 +65,41 @@ public class BookRepository {
         return null;
     }
 
+    public Book GetBookBySymbol(Context context, String symbol){
+        try {
+            return ( new GetBookBySymbolAsyncTask(context,symbol).execute().get() );
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
     /**
      * Below you will find the AsyncTasks
      */
+    private static class GetBookBySymbolAsyncTask extends AsyncTask<Void, Void, Book>{
+        private BookDatabase bookDatabase;
+        private BookDao bookDao;
+        String symbol;
+
+        GetBookBySymbolAsyncTask(Context context, String symbol){
+            this.bookDatabase = BookDatabase.getInstance(context);
+            this.bookDao = bookDatabase.bookDao();
+            this.symbol = symbol;
+        }
+
+        @Override
+        protected Book doInBackground(Void... voids) {
+            return bookDao.getStock(symbol);
+        }
+
+
+    }
+
     private static class GetAllBooksAsyncTask extends AsyncTask<Void, Void, List<Book>>{
         private BookDatabase bookDatabase;
         private BookDao bookDao;
@@ -144,7 +182,6 @@ public class BookRepository {
                 Book mBook = mBookDao.getAllStocksOnStart().get(i);
                 String symbol = mBook.getSymbol();
 
-                mBookDao.getStock(symbol);
                 SharedConstants sc = new SharedConstants();
                 String url = sc.getApiUrl(symbol);
 
@@ -171,6 +208,7 @@ public class BookRepository {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "UpdateAllBooksAsyncTask() Could not reach API: " + url);
                         error.printStackTrace();
                     }
                 });

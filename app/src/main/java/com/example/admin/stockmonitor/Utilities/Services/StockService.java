@@ -30,18 +30,17 @@ public class StockService extends Service {
     // Variables
     private final IBinder mBinder = new LocalBinder();
     private boolean isRunning = false;
-    private static final long mServiceInterval = 120000*1000;
+    private static final long mServiceInterval = 120*1000;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
+    BookRepository mBookRepository = new BookRepository();
 
 
     /**
-     * THIS FUNCTION MUST RUN IN AN AsyncTask WHENEVER USED!
      * @return : A List of Stocks from Database
      */
     public List<Book> getAllStocks(){
-        BookRepository task = new BookRepository();
-        return task.GetAllBooks(getApplicationContext());
+        return mBookRepository.GetAllBooks(getApplicationContext());
 //        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
 //        BookDao mBookDao = db.bookDao();
 //        return mBookDao.getAllStocksOnStart();
@@ -49,18 +48,16 @@ public class StockService extends Service {
 
 
     /**
-     * THIS FUNCTION MUST RUN IN AN AsyncTask WHENEVER USED!
      * @param symbol : Book Object's stock symbol
      * @return : A single Stock from Book Object
      */
     public Book getStock(String symbol){
-        List<Book> mBooks = getAllStocks();
-        int size = mBooks.size();
-        for(int i = 0; i < size; i++){
-            if (mBooks.get(i).getSymbol().equals(symbol)){
-                return (mBooks.get(i));
-            }
+        Book mBook = mBookRepository.GetBookBySymbol(getApplicationContext(),symbol);
+        if(mBook != null){
+            Log.d(TAG, "getStock() found Book with Symbol = " + mBook.getSymbol());
+            return mBook;
         }
+        Log.d(TAG, "getStock() no Book with matched symbol = " + symbol + " was found");
         return null;
     }
 
@@ -70,7 +67,7 @@ public class StockService extends Service {
      * @param intent : Intent
      */
     private static void doBackgroundThing(Context context, Intent intent){
-        AsyncTask<Object, Object, String> task = new AsyncTask<Object, Object, String>(){
+        AsyncTask<Object, Object, String> asyncTask = new AsyncTask<Object, Object, String>(){
             @Override
             protected void onPreExecute(){
                 super.onPreExecute();
@@ -103,7 +100,7 @@ public class StockService extends Service {
             }
         };
 
-        task.execute();
+        asyncTask.execute();
 
     }
 

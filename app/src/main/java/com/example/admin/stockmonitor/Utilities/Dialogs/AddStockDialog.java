@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.example.admin.stockmonitor.OverviewActivity;
 import com.example.admin.stockmonitor.R;
 
 public class AddStockDialog extends AppCompatDialogFragment {
@@ -43,18 +46,7 @@ public class AddStockDialog extends AppCompatDialogFragment {
     public void negativeButton(){}
 
     public void positiveButton(){
-        /* doesn't work yet, need to research a better way because positveButton keeps dismising
-
-        if (TextUtils.isEmpty(mEditSymbol.getText())){
-            mEditSymbol.setError("Field cannot be empty");
-        }
-        if (TextUtils.isEmpty(mEditPurchasePrice.getText())){
-            mEditPurchasePrice.setError("Field cannot be empty");
-        }
-        if (TextUtils.isEmpty(mEditNumOfStocks.getText())){
-            mEditNumOfStocks.setError("Field cannot be empty");
-        }
-        */
+        dismiss();
 
         if(!TextUtils.isEmpty(mEditSymbol.getText()) &&
                 !TextUtils.isEmpty(mEditPurchasePrice.getText()) &&
@@ -83,7 +75,7 @@ public class AddStockDialog extends AppCompatDialogFragment {
         try {
             mListener = (AddStockDialogListener)context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "AddStockDialog is not imeplemented");
+            throw new ClassCastException(context.toString() + "AddStockDialog is not implemented");
         }
     }
 }

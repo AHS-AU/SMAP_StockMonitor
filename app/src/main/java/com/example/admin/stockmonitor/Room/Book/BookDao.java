@@ -33,7 +33,4 @@ public interface BookDao {
     @Query("SELECT * FROM stock_table")
     List<Book> getAllStocksOnStart();
 
-    // Making it LiveData so we can observe the object's changes asap
-    @Query("SELECT * FROM stock_table")
-    LiveData<List<Book>> getAllStocks();
 }
