@@ -118,21 +118,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         initDb();
         lvStocks.setAdapter(mStockAdapter);
 
-//        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
-//        bookViewModel.getAllStocks().observe(this, new Observer<List<Book>>() {
-//            @Override
-//            public void onChanged(@Nullable List<Book> books) {
-//                // Set up the Custom Adapter StockAdapter that creates the UI from list_of_stocks.xml
-//                lvStocks.setAdapter(new StockAdapter(OverviewActivity.this, books));
-//            }
-//        });
-
-        // Set up Service Intent
-//        Intent mStockServiceIntent = new Intent(this, StockService.class);
-//        startService(mStockServiceIntent);
-        //ContextCompat.startForegroundService(this, mStockServiceIntent);
-
-
         /**
          * Listview: Shows Stocks
          * Function: Start DetailsActivity with the Stock Item

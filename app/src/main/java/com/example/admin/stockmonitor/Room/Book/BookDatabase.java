@@ -23,9 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.example.admin.stockmonitor.Utilities.SharedConstants.bookViewModel;
-
-@Database(entities = {Book.class}, version = 9)
+@Database(entities = {Book.class}, version = 1, exportSchema = false)
 public abstract class BookDatabase extends RoomDatabase {
     public static final String TAG = "BookDatabase";
     public abstract BookDao bookDao();
