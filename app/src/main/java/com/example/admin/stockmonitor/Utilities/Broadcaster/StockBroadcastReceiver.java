@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
+
 public final class StockBroadcastReceiver extends BroadcastReceiver {
     public static final String TAG = "StockBroadcastReceiver";
     private RequestQueue mQueue;

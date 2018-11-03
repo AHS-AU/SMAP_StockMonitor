@@ -2,9 +2,11 @@ package com.example.admin.stockmonitor;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import java.util.List;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
+
 public class OverviewActivity extends AppCompatActivity implements AddStockDialog.AddStockDialogListener {
     private static final String TAG = OverviewActivity.class.getSimpleName();
     // UI Variables
@@ -49,28 +52,50 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     private static BookAsyncTasks mBookAsyncTasks = new BookAsyncTasks();
     private boolean isRefreshing = false;
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
-    private Intent mIntent;
     private StockService mStockService;
     private StockAdapter mStockAdapter = new StockAdapter(OverviewActivity.this, null);
 
+    private BroadcastReceiver onDatabaseUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            notifyStockAdapterChanges();
+        }
+    };
+
+
     public void notifyStockAdapterChanges(){
-        List<Book> books = mStockService.getAllStocks();
-        mStockAdapter.setBookList(books);
-        mStockAdapter.notifyDataSetChanged();
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mStockService = ((StockService.LocalBinder)service).getService();
-            List<Book> books = mStockService.getAllStocks();
-            mStockAdapter.setBookList(books);
-            lvStocks.setAdapter(mStockAdapter);
+
+            Handler mHandler = new Handler();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "tmpDebug: Size = " + mStockService.getAllStocks().size());
+                    for(int i = 0; i < mStockService.getAllStocks().size(); i++){
+                        Log.d(TAG, "tmpDebug: Book["+i+"] = " + mStockService.getAllStocks().get(i).getSymbol() );
+                    }
+                    mStockAdapter.setBookList(mStockService.getAllStocks());
+                    mStockAdapter.notifyDataSetChanged();
+                }
+            }, 1000);   // This delay should be fine for about 50 stocks, it's lazy implementation ;)
+//            mStockAdapter.setBookList(mStockService.getAllStocks());
+//            mStockAdapter.notifyDataSetChanged();
+//            lvStocks.setAdapter(mStockAdapter);
+            //notifyStockAdapterChanges();
+            IntentFilter filter = new IntentFilter(FILTER_DB_UI_CHANGES);
+            LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onDatabaseUpdateReceiver, filter);
             Log.d(TAG, "Service Connected to OverviewActivity");
 
         }
 
         public void onServiceDisconnected(ComponentName name) {
             mStockService = null;
+            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
             Log.d(TAG, "Service Disconnected from OverviewActivity");
         }
 
@@ -89,7 +114,9 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         lvStocks = findViewById(R.id.lvStocks);
         btnAddStock = findViewById(R.id.btnAddStock);
 
-        // TODO Replace these with dynamic from Room Persistance DB
+        // Access the DB
+        initDb();
+        lvStocks.setAdapter(mStockAdapter);
 
 //        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
 //        bookViewModel.getAllStocks().observe(this, new Observer<List<Book>>() {
@@ -113,10 +140,8 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         lvStocks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (bookViewModel.getAllStocks().getValue()!= null ){
-                    Book stock = bookViewModel.getAllStocks().getValue().get(position);
-                    startDetailsActivity(stock);
-                }
+                Book stock = mStockService.getAllStocks().get(position);
+                startDetailsActivity(stock);
             }
         });
 
@@ -158,12 +183,16 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                 }
             }, 1000);   // This delay should be fine for about 50 stocks, it's lazy implementation ;)
             isRefreshing = true;
-            Intent intent = new Intent(FILTER_DATA_UPDATE);
+            Intent intent = new Intent(FILTER_DB_UI_CHANGES);
             LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(intent);
         } else{
             isRefreshing = false;
         }
         invalidateOptionsMenu();
+    }
+
+    public void initDb(){
+        mBookAsyncTasks.InitDatabase(getApplicationContext());
     }
 
 

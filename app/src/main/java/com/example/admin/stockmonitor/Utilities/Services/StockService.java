@@ -16,6 +16,7 @@ import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
+import com.example.admin.stockmonitor.Utilities.AsyncTasks.BookAsyncTasks;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
@@ -33,7 +34,7 @@ public class StockService extends Service {
     // Variables
     private final IBinder mBinder = new LocalBinder();
     private boolean isRunning = false;
-    private static final long mServiceInterval = 6*1000;
+    private static final long mServiceInterval = 120000*1000;
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
 
@@ -43,9 +44,11 @@ public class StockService extends Service {
      * @return : A List of Stocks from Database
      */
     public List<Book> getAllStocks(){
-        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
-        BookDao mBookDao = db.bookDao();
-        return mBookDao.getAllStocksOnStart();
+        BookAsyncTasks task = new BookAsyncTasks();
+        return task.GetAllBooks(getApplicationContext());
+//        BookDatabase db = BookDatabase.getInstance(getApplicationContext());
+//        BookDao mBookDao = db.bookDao();
+//        return mBookDao.getAllStocksOnStart();
     }
 
 
@@ -83,8 +86,8 @@ public class StockService extends Service {
                 String s = "Background Service job";
                 try{
                     Thread.sleep(5*1000);
-                    Log.d(TAG, "Background Service is about to send Broadcast with IntentAction = " + FILTER_DATA_UPDATE);
                     intent.setAction(FILTER_DATA_UPDATE);
+                    Log.d(TAG, "Background Service is about to send Broadcast with IntentAction = " + intent.getAction());
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 } catch (Exception e){
                     s += " did not finish due to error";
@@ -97,6 +100,9 @@ public class StockService extends Service {
             @Override
             protected void onPostExecute(String stringResult) {
                 super.onPostExecute(stringResult);
+                intent.setAction(FILTER_DB_UI_CHANGES);
+                Log.d(TAG, "Background Service is about to send Broadcast with IntentAction = " + intent.getAction());
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 Log.d(TAG, stringResult);
             }
         };

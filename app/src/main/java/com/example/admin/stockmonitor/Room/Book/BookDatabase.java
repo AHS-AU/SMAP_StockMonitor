@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.bookViewModel;
 
-@Database(entities = {Book.class}, version = 1)
+@Database(entities = {Book.class}, version = 9)
 public abstract class BookDatabase extends RoomDatabase {
     public static final String TAG = "BookDatabase";
     public abstract BookDao bookDao();
@@ -49,7 +49,7 @@ public abstract class BookDatabase extends RoomDatabase {
                     BookDatabase.class, "book_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
-                    .allowMainThreadQueries()   // I am a rebel, this is what you get for not allowing us LiveData / ViewModel
+                    //.allowMainThreadQueries()
                     .build();
         }
         return instance;
@@ -62,12 +62,14 @@ public abstract class BookDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+            Log.d(TAG, "PopulateDbAsyncTask called");
             new PopulateDbAsyncTask(instance).execute();
         }
 
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
+            Log.d(TAG, "UpdateDbAsyncTask called");
             new UpdateDbAsyncTask(instance).execute();
 
         }
@@ -161,6 +163,7 @@ public abstract class BookDatabase extends RoomDatabase {
          */
         public static void addToDb(BookDao vBookDao){
             if (mQueue == null) {
+                Log.d(TAG, "mQueue = null, requesting new Queue");
                 mQueue = Volley.newRequestQueue(mContext);
             }
             SharedConstants sc = new SharedConstants();
