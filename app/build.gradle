@@ -17,7 +17,7 @@ android {
         }
         debug {
             minifyEnabled false
-            versionNameSuffix 'AliSaleh_au545208_Assignment1'
+            versionNameSuffix 'AliSaleh_au545208_Assignment2'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             android.applicationVariants.all { variant ->
                 variant.outputs.all {

@@ -57,7 +57,10 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            notifyStockAdapterChanges(mStockService.getAllStocks());
+            if(FILTER_DB_UI_CHANGES.equals(action)){
+                Log.d(TAG, FILTER_DB_UI_CHANGES);
+                notifyStockAdapterChanges(mStockService.getAllStocks());
+            }
         }
     };
 
@@ -82,20 +85,15 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                     mStockAdapter.notifyDataSetChanged();
                 }
             }, 1000);
-            IntentFilter filter = new IntentFilter(FILTER_DB_UI_CHANGES);
-            LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onDatabaseUpdateReceiver, filter);
-            Log.d(TAG, "Service Connected to OverviewActivity");
+            Log.d(TAG, "onServiceConnected " + TAG);
 
         }
 
         public void onServiceDisconnected(ComponentName name) {
             mStockService = null;
-            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
-            Log.d(TAG, "Service Disconnected from OverviewActivity");
+            Log.d(TAG, "onServiceDisconnected " + TAG);
+
         }
-
-
-
     };
 
     @Override
@@ -130,7 +128,8 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         // Init Service & its necessary data
         Intent mStockServiceIntent = new Intent(this, StockService.class);
         startService(mStockServiceIntent);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
+        RegisterBroadcasters();
+
 
     }
 
@@ -163,7 +162,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                     isRefreshing = false;
                     invalidateOptionsMenu();
                 }
-            }, 1000);   // This delay should be fine for about 50 stocks, it's lazy implementation ;)
+            }, 1000);
             isRefreshing = true;
             LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(new Intent(FILTER_DATA_UPDATE));
         } else{
@@ -176,6 +175,26 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         mBookRepository.InitDatabase(getApplicationContext());
     }
 
+    private void RegisterBroadcasters(){
+        LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onDatabaseUpdateReceiver, new IntentFilter(FILTER_DB_UI_CHANGES));
+    }
+
+    private void UnregisterBroadcasters(){
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mStockBroadcastReceiver);
+    }
+
+    private void bindToStockService(){
+        Log.d(TAG, mServiceConnection.toString());
+        bindService(new Intent(OverviewActivity.this, StockService.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindToStockService(){
+        Log.d(TAG, mServiceConnection.toString());
+        unbindService(mServiceConnection);
+    }
+
 
     /**********************************************************************************************
      *                                   Override Functions                                       *
@@ -185,7 +204,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         super.onResume();
         if (!isServiceBound){
             Log.d(TAG, "onResume() Service Starting");
-            bindService(new Intent(OverviewActivity.this, StockService.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+            bindToStockService();
             isServiceBound = true;
         }
     }
@@ -194,8 +213,8 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     protected void onPause() {
         super.onPause();
         if (mServiceConnection != null && isServiceBound){
-            Log.d(TAG, "onDestroy() Service Dead");
-            unbindService(mServiceConnection);
+            Log.d(TAG, "onStop() Service Dead");
+            unbindToStockService();
             isServiceBound = false;
         }
     }
@@ -203,30 +222,20 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart() Registering Receivers");
-//        Intent mStockServiceIntent = new Intent(this, StockService.class);
-//        startService(mStockServiceIntent);
-//        LocalBroadcastManager.getInstance(this).registerReceiver(mStockBroadcastReceiver, mIntentFilter.getIntentFilter());
-//        mIntent = new Intent(FILTER_DATA_SINGLE_UPDATE);
+        Log.d(TAG, "onStart()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop() Unregistering Receivers");
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(mStockBroadcastReceiver);
+        UnregisterBroadcasters();
+        Log.d(TAG, "onStop()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mStockBroadcastReceiver);
-
-//        if (mServiceConnection != null && isServiceBound){
-//            Log.d(TAG, "onDestroy() Service Dead");
-//            unbindService(mServiceConnection);
-//            isServiceBound = false;
-//        }
+        Log.d(TAG, "onDestroy()");
     }
 
         @Override
@@ -281,6 +290,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             intent.putExtra(EXTRA_NUMBER_OF_STOCKS, numberOfStocks);
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             Log.d(TAG, "getStockInfo() Stock(" + symbol + ") sent to Broadcastreceiver with action = " + intent.getAction());
+            refreshStocks(true);
         }
     }
 

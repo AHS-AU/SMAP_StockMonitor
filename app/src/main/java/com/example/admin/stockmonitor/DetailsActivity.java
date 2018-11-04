@@ -1,7 +1,15 @@
 package com.example.admin.stockmonitor;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,6 +21,10 @@ import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
+import com.example.admin.stockmonitor.Utilities.Services.StockService;
+
+import java.util.List;
+import java.util.Random;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
 
@@ -32,6 +44,47 @@ public class DetailsActivity extends AppCompatActivity {
     private Book mStock;
     private StockBroadcastReceiver mStockBroadcastReceiver;
     private static BookRepository mBookRepository = new BookRepository();
+    private StockService mStockService;
+    private boolean mStockServiceBound = false;
+    private ServiceConnection mStockServiceConnection;
+
+    private BroadcastReceiver onDatabaseUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(FILTER_DB_UI_CHANGES.equals(action)){
+                Log.d(TAG, FILTER_DB_UI_CHANGES);
+                notifyStockAdapterChanges(mStockService.getStock(mStock.getSymbol()));
+            }
+        }
+    };
+
+    public void notifyStockAdapterChanges(Book book){
+//        Random random = new Random();
+//        int number = random.nextInt(1000);
+//        book.setPurchasePrice(String.valueOf(number));
+        mStock = book;
+        updateUi(mStock);
+    }
+
+    private void SetupConnectionToStockService(){
+        mStockServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mStockService = ((StockService.LocalBinder)service).getService();
+                IntentFilter filter = new IntentFilter(FILTER_DB_UI_CHANGES);
+                LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onDatabaseUpdateReceiver, filter);
+                Log.d(TAG, "onServiceConnected " + TAG);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mStockService = null;
+                LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
+                Log.d(TAG, "onServiceDisconnected " + TAG);
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +136,13 @@ public class DetailsActivity extends AppCompatActivity {
 
         mBtnEdit.setOnClickListener(v -> startEditActivity());
 
+        SetupConnectionToStockService();
+
     }
 
     private void deleteStock(Book stock){
         Log.d(TAG, "DELETE STOCK?");
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
         BookDatabase db = BookDatabase.getInstance(getApplication());
         BookDao mBookDao = db.bookDao();
         mBookRepository.DeleteBook(mBookDao,stock);
@@ -104,6 +160,23 @@ public class DetailsActivity extends AppCompatActivity {
         // Start EditActivity for Result
         startActivityForResult(intEditActivity, REQ_DETAILS_UPDATE);
 
+    }
+
+    private void updateUi(Book book){
+        mTxtDisplayPrice.setText(book.getPurchasePrice());
+        mTxtDisplayStocks.setText(String.valueOf(book.getNumberOfStocks()));
+    }
+
+    private void bindToStockService(){
+        Log.d(TAG, mStockServiceConnection.toString());
+        bindService(new Intent(DetailsActivity.this, StockService.class), mStockServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindToStockService(){
+        Log.d(TAG, mStockServiceConnection.toString());
+        unbindService(mStockServiceConnection);
+        mStockService = null;
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
     }
 
 
@@ -134,4 +207,20 @@ public class DetailsActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        bindToStockService();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+        unbindToStockService();
+
+    }
+
 }

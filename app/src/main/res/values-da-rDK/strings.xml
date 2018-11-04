@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AktieOvervåger</string>
     <string name="purchase">"Købt ved: "</string>
     <string name="stockName">Aktie Navn</string>
     <string name="myStock">Mine Aktier:</string>
@@ -24,4 +23,5 @@
     <string name="addStockSymbol">Aktie Symbol</string>
     <string name="addTitle">Tilføj en Aktie fra API</string>
     <string name="refresh">Opdater</string>
+    <string name="alt_app_name">AktieOvervåger</string>
 </resources>

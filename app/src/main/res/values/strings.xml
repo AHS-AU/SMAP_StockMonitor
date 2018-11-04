@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StockMonitor</string>
+    <string name="app_name">au545208 Stocks</string>
     <string name="myStock">My Stocks:</string>
     <string name="stockName">Stock Name</string>
     <string name="purchase">Purchased at:\u0020</string>
@@ -25,7 +25,7 @@
     <string name="addTitle">Add a Stock from the API</string>
     <string name="addPositive" translatable="false">OK</string>
     <string name="refresh">Refresh</string>
-
+    <string name="alt_app_name">StockMonitor</string>
 
 
 </resources>

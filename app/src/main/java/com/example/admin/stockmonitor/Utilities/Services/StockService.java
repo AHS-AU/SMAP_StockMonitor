@@ -30,7 +30,7 @@ public class StockService extends Service {
     // Variables
     private final IBinder mBinder = new LocalBinder();
     private boolean isRunning = false;
-    private static final long mServiceInterval = 120*1000;
+    private static final long mServiceInterval = 120*1000;  // 2 min service interval
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
     BookRepository mBookRepository = new BookRepository();
@@ -113,10 +113,6 @@ public class StockService extends Service {
         }
     }
 
-    public Context getAppContext(){
-        return getApplicationContext();
-    }
-
 
     /**********************************************************************************************
      *                                   Override Functions                                       *
@@ -124,10 +120,7 @@ public class StockService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate() Registering BroadcastReceiver = " + mStockBroadcastReceiver.TAG);
-        //registerReceiver(mStockBroadcastReceiver, mIntentFilter);
-        //this.registerReceiver(mStockBroadcastReceiver, mIntentFilter);
-        //LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mStockBroadcastReceiver, mIntentFilter);
+        Log.d(TAG, "onCreate()");
     }
 
     @Override
@@ -139,7 +132,6 @@ public class StockService extends Service {
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
-        isRunning = true;
         Log.d(TAG, "onRebind() isRunning = " + isRunning);
     }
 
@@ -147,10 +139,7 @@ public class StockService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        Log.d(TAG, "StockService onDestroy() Unregistering BroadcastReceiver = " +
-                mStockBroadcastReceiver.TAG + " and isRunning = " + isRunning);
-        //unregisterReceiver(mStockBroadcastReceiver);
-        //LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mStockBroadcastReceiver);
+        Log.d(TAG, "onDestroy() isRunning = " + isRunning);
     }
 
     @Override
@@ -167,7 +156,7 @@ public class StockService extends Service {
                         SimpleDateFormat mDate = new SimpleDateFormat("EEEE, dd. MMMM YYYY", Locale.getDefault());
                         String mNotificationMessage = "Last checked stocks prices at: " + mTime.format(new Date());
                         Notification mNotification = new NotificationCompat.Builder(StockService.this, NOTIF_CHANNEL_ID_STOCKSERVICE)
-                                .setContentTitle(getApplicationContext().getString(R.string.app_name))
+                                .setContentTitle(getApplicationContext().getString(R.string.alt_app_name))
                                 .setContentText(mNotificationMessage)
                                 .setTicker(mNotificationMessage)
                                 .setSubText(mDate.format(new Date()))
