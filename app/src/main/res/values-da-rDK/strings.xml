@@ -27,4 +27,8 @@
     <string name="adding">"Tilføjer "</string>
     <string name="tothedb">" til Databasen"</string>
     <string name="nosymbolfound">"Kunne ikke tilføje aktie med symbol: "</string>
+    <string name="labelSymbol">Symbol:</string>
+    <string name="labelPrimaryExchange">Primær Udveksling:</string>
+    <string name="labelLatestValue">Seneste Værdi:</string>
+    <string name="labelLatestTimestamp">Sidst Opdateret:</string>
 </resources>

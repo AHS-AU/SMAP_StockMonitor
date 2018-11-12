@@ -16,7 +16,7 @@
         android:textSize="@dimen/txtNormalSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,6 +55,54 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/txtStocks"
         app:layout_constraintTop_toBottomOf="@+id/txtStocks" />
+
+    <TextView
+        android:id="@+id/txtSymbol"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/labelSymbol"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtSector"
+        app:layout_constraintTop_toBottomOf="@+id/txtSector" />
+
+    <TextView
+        android:id="@+id/txtPrimaryExchange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/labelPrimaryExchange"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtSymbol"
+        app:layout_constraintTop_toBottomOf="@+id/txtSymbol" />
+
+    <TextView
+        android:id="@+id/txtLatestValue"
+        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/labelLatestValue"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtPrimaryExchange"
+        app:layout_constraintTop_toBottomOf="@+id/txtPrimaryExchange" />
+
+    <TextView
+        android:id="@+id/txtLatestUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical|clip_vertical"
+        android:text="@string/labelLatestTimestamp"
+        android:textSize="@dimen/txtNormalSize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/txtLatestValue"
+        app:layout_constraintTop_toBottomOf="@+id/txtLatestValue" />
 
     <TextView
         android:id="@+id/txtDisplayName"
@@ -118,6 +166,62 @@
         app:layout_constraintStart_toStartOf="@+id/txtDisplayStocks"
         app:layout_constraintTop_toTopOf="@+id/txtSector" />
 
+    <TextView
+        android:id="@+id/txtDisplaySymbol"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSymbol"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplaySector"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplaySector"
+        app:layout_constraintTop_toTopOf="@+id/txtSymbol" />
+
+    <TextView
+        android:id="@+id/txtDisplayPrimaryExchange"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtPrimaryExchange"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplaySymbol"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplaySymbol"
+        app:layout_constraintTop_toTopOf="@+id/txtPrimaryExchange" />
+
+    <TextView
+        android:id="@+id/txtDisplayLatestValue"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtLatestValue"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplayPrimaryExchange"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplayPrimaryExchange"
+        app:layout_constraintTop_toTopOf="@+id/txtLatestValue" />
+
+    <TextView
+        android:id="@+id/txtDisplayLatestUpdate"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical|center"
+        android:hint=""
+        android:inputType="none"
+        android:textSize="@dimen/txtNormalSize"
+        app:layout_constraintBottom_toBottomOf="@+id/txtLatestUpdate"
+        app:layout_constraintEnd_toEndOf="@+id/txtDisplayLatestValue"
+        app:layout_constraintStart_toStartOf="@+id/txtDisplayLatestValue"
+        app:layout_constraintTop_toTopOf="@+id/txtLatestUpdate" />
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -148,12 +252,12 @@
         android:id="@+id/btnDelete"
         android:layout_width="@dimen/btnNormalWidth"
         android:layout_height="@dimen/btnNormalHeight"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button_background_selector"
         android:text="@string/btnDelete"
         android:textAllCaps="false"
@@ -162,8 +266,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnEdit"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
-        app:layout_constraintTop_toBottomOf="@+id/txtDisplaySector"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDisplayLatestUpdate"
+        app:layout_constraintVertical_bias="0.97" />
 
     <Button
         android:id="@+id/btnEdit"

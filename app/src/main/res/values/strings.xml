@@ -29,6 +29,10 @@
     <string name="adding">"Adding "</string>
     <string name="tothedb">" to the Database"</string>
     <string name="nosymbolfound">"Could not add stock with symbol: "</string>
+    <string name="labelSymbol">Symbol:</string>
+    <string name="labelPrimaryExchange">Primary Exchange:</string>
+    <string name="labelLatestValue">Latest Value:</string>
+    <string name="labelLatestTimestamp">Latest Update:</string>
 
 
 </resources>
