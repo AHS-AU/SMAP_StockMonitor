@@ -30,7 +30,7 @@ public class StockService extends Service {
     // Variables
     private final IBinder mBinder = new LocalBinder();
     private boolean isRunning = false;
-    private static final long mServiceInterval = 10*1000;  // 2 min service interval
+    private static final long mServiceInterval = 120*1000;  // 2 min service interval
     private StockBroadcastReceiver mStockBroadcastReceiver = new StockBroadcastReceiver();
     private StockIntentFilter mIntentFilter = new StockIntentFilter();
     BookRepository mBookRepository = new BookRepository();

@@ -50,12 +50,10 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Variables
     private Book mStock;
-    private StockBroadcastReceiver mStockBroadcastReceiver;
     private static BookRepository mBookRepository = new BookRepository();
     private StockService mStockService;
-    private boolean mStockServiceBound = false;
     private ServiceConnection mStockServiceConnection;
-    public static String mSymbol;
+    private static String mSymbol;
 
     private BroadcastReceiver onDatabaseUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -115,12 +113,6 @@ public class DetailsActivity extends AppCompatActivity {
         mTxtDisplayLatestValue = findViewById(R.id.txtDisplayLatestValue);
         mTxtDisplayLatestUpdate = findViewById(R.id.txtDisplayLatestUpdate);
 
-        // Update UI with retrieved Intent
-//        mTxtDisplayName.setText(mStock.getCompanyName());
-//        mTxtDisplayPrice.setText(String.valueOf(mStock.getPurchasePrice()));
-//        mTxtDisplayStocks.setText(String.valueOf(mStock.getNumberOfStocks()));
-//        mTxtDisplaySector.setText(mStock.getSector());
-
         // Action Bar
         if (getSupportActionBar() != null){
             getSupportActionBar().setTitle(R.string.DetailsActionbar);
@@ -145,6 +137,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         mBtnEdit.setOnClickListener(v -> startEditActivity());
 
+        // Setup the StockService
         SetupConnectionToStockService();
 
     }

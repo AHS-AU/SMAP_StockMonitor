@@ -53,25 +53,33 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     private StockService mStockService;
     private StockAdapter mStockAdapter = new StockAdapter(OverviewActivity.this, null);
 
+    /**
+     * BroadcastReceiver to update UI
+     */
     private BroadcastReceiver onDatabaseUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if(FILTER_DB_UI_CHANGES.equals(action)){
                 Log.d(TAG, FILTER_DB_UI_CHANGES);
-                Book tmpBook = mStockService.getStock("AAPL");
-                Log.d(TAG, "Book = " + tmpBook.getSymbol() + " Price = " + tmpBook.getLatestPrice());
                 notifyStockAdapterChanges(mStockService.getAllStocks());
             }
         }
     };
 
 
+    /**
+     * Notify StockAdapter to update
+     * @param books : List of Books
+     */
     public void notifyStockAdapterChanges(List<Book> books){
         mStockAdapter.setBookList(books);
         mStockAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * ServiceConnection establishment
+     */
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mStockService = ((StockService.LocalBinder)service).getService();
@@ -103,8 +111,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-
-
 
         // Set up UI variables
         lvStocks = findViewById(R.id.lvStocks);
@@ -150,6 +156,10 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         startActivityForResult(intDetailsActivity, REQ_OVERVIEW_UPDATE);
     }
 
+    /**
+     * Refresh the Stocks in the List
+     * @param enable : Refresh Icon Handling
+     */
     private void refreshStocks(final boolean enable){
         if(enable){
             Handler mHandler = new Handler();
@@ -208,11 +218,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         // Init Service & its necessary data
@@ -223,11 +228,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         Log.d(TAG, "onStart()");
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop()");
-    }
 
     @Override
     protected void onDestroy() {
@@ -255,6 +255,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                 BookDatabase db = BookDatabase.getInstance(getApplication());
                 BookDao mBookDao = db.bookDao();
                 mBookRepository.UpdateBook(mBookDao, mStock);
+                refreshStocks(true);
 
                 break;
             default:
@@ -319,19 +320,5 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         }
         return true;
     }
-
-    //    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putSerializable(SAVE_STOCK,mStock);
-//    }
-//
-//    @Override
-//    public void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        mStock = (Stock)savedInstanceState.getSerializable(SAVE_STOCK);
-//        updateUI();
-//    }
-
 
 }
