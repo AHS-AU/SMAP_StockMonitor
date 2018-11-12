@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/txtPrice"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"
@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/txtStocks"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"
@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/txtSector"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"
@@ -58,7 +58,7 @@
 
     <TextView
         android:id="@+id/txtSymbol"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"
@@ -82,7 +82,7 @@
 
     <TextView
         android:id="@+id/txtLatestValue"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"

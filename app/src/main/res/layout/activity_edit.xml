@@ -55,13 +55,13 @@
         android:textSize="@dimen/txtNormalSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtPrice2"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/txtMediumHeight"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"
@@ -73,7 +73,7 @@
 
     <TextView
         android:id="@+id/txtStocks2"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/txtMediumHeight"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"
@@ -85,7 +85,7 @@
 
     <TextView
         android:id="@+id/txtSector2"
-        android:layout_width="@dimen/txtMediumWidth"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/txtMediumHeight"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|clip_vertical"

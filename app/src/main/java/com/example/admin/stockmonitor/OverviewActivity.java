@@ -59,6 +59,8 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
             final String action = intent.getAction();
             if(FILTER_DB_UI_CHANGES.equals(action)){
                 Log.d(TAG, FILTER_DB_UI_CHANGES);
+                Book tmpBook = mStockService.getStock("AAPL");
+                Log.d(TAG, "Book = " + tmpBook.getSymbol() + " Price = " + tmpBook.getLatestPrice());
                 notifyStockAdapterChanges(mStockService.getAllStocks());
             }
         }
@@ -125,11 +127,6 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
         });
 
         btnAddStock.setOnClickListener(v -> openAddStockDialog());
-
-        // Init Service & its necessary data
-        Intent mStockServiceIntent = new Intent(this, StockService.class);
-        startService(mStockServiceIntent);
-        RegisterBroadcasters();
 
 
     }
@@ -213,29 +210,34 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
     @Override
     protected void onPause() {
         super.onPause();
-        if (mServiceConnection != null && isServiceBound){
-            Log.d(TAG, "onStop() Service Dead");
-            unbindToStockService();
-            isServiceBound = false;
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        // Init Service & its necessary data
+        Intent mStockServiceIntent = new Intent(this, StockService.class);
+        startService(mStockServiceIntent);
+        RegisterBroadcasters();
+        bindToStockService();
         Log.d(TAG, "onStart()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        UnregisterBroadcasters();
         Log.d(TAG, "onStop()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mServiceConnection != null && isServiceBound){
+            Log.d(TAG, "onDestroy() Service Dead");
+            unbindToStockService();
+            isServiceBound = false;
+        }
+        UnregisterBroadcasters();
         Log.d(TAG, "onDestroy()");
     }
 

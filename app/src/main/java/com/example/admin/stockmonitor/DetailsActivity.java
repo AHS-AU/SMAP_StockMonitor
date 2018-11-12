@@ -23,7 +23,10 @@ import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import static com.example.admin.stockmonitor.Utilities.SharedConstants.*;
@@ -39,6 +42,11 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView mTxtDisplayPrice;
     private TextView mTxtDisplayStocks;
     private TextView mTxtDisplaySector;
+    private TextView mTxtDisplaySymbol;
+    private TextView mTxtDisplayPrimaryExchange;
+    private TextView mTxtDisplayLatestValue;
+    private TextView mTxtDisplayLatestUpdate;
+
 
     // Variables
     private Book mStock;
@@ -47,6 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
     private StockService mStockService;
     private boolean mStockServiceBound = false;
     private ServiceConnection mStockServiceConnection;
+    public static String mSymbol;
 
     private BroadcastReceiver onDatabaseUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -54,18 +63,10 @@ public class DetailsActivity extends AppCompatActivity {
             final String action = intent.getAction();
             if(FILTER_DB_UI_CHANGES.equals(action)){
                 Log.d(TAG, FILTER_DB_UI_CHANGES);
-                notifyStockAdapterChanges(mStockService.getStock(mStock.getSymbol()));
+                updateUi(mStockService.getStock(mSymbol));
             }
         }
     };
-
-    public void notifyStockAdapterChanges(Book book){
-//        Random random = new Random();
-//        int number = random.nextInt(1000);
-//        book.setPurchasePrice(String.valueOf(number));
-        mStock = book;
-        updateUi(mStock);
-    }
 
     private void SetupConnectionToStockService(){
         mStockServiceConnection = new ServiceConnection() {
@@ -74,6 +75,9 @@ public class DetailsActivity extends AppCompatActivity {
                 mStockService = ((StockService.LocalBinder)service).getService();
                 IntentFilter filter = new IntentFilter(FILTER_DB_UI_CHANGES);
                 LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(onDatabaseUpdateReceiver, filter);
+                Book vStock = mStockService.getStock(mSymbol);
+                Log.d(TAG, "Book = " + vStock.getSymbol() + " Price = " + vStock.getLatestPrice());
+                updateUi(vStock);
                 Log.d(TAG, "onServiceConnected " + TAG);
             }
 
@@ -94,6 +98,7 @@ public class DetailsActivity extends AppCompatActivity {
         final Intent mIntent = getIntent();
         Bundle mStockBundle = mIntent.getExtras();
         mStock = (Book)mStockBundle.getSerializable(EXTRA_STOCK);
+        mSymbol = mStock.getSymbol();
 
         // UI References: Buttons / Switches
         mBtnBack = findViewById(R.id.btnBack);
@@ -105,12 +110,16 @@ public class DetailsActivity extends AppCompatActivity {
         mTxtDisplayPrice = findViewById(R.id.txtDisplayPrice);
         mTxtDisplayStocks = findViewById(R.id.txtDisplayStocks);
         mTxtDisplaySector = findViewById(R.id.txtDisplaySector);
+        mTxtDisplaySymbol = findViewById(R.id.txtDisplaySymbol);
+        mTxtDisplayPrimaryExchange = findViewById(R.id.txtDisplayPrimaryExchange);
+        mTxtDisplayLatestValue = findViewById(R.id.txtDisplayLatestValue);
+        mTxtDisplayLatestUpdate = findViewById(R.id.txtDisplayLatestUpdate);
 
         // Update UI with retrieved Intent
-        mTxtDisplayName.setText(mStock.getCompanyName());
-        mTxtDisplayPrice.setText(String.valueOf(mStock.getPurchasePrice()));
-        mTxtDisplayStocks.setText(String.valueOf(mStock.getNumberOfStocks()));
-        mTxtDisplaySector.setText(mStock.getSector());
+//        mTxtDisplayName.setText(mStock.getCompanyName());
+//        mTxtDisplayPrice.setText(String.valueOf(mStock.getPurchasePrice()));
+//        mTxtDisplayStocks.setText(String.valueOf(mStock.getNumberOfStocks()));
+//        mTxtDisplaySector.setText(mStock.getSector());
 
         // Action Bar
         if (getSupportActionBar() != null){
@@ -140,6 +149,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+
     private void deleteStock(Book stock){
         Log.d(TAG, "DELETE STOCK?");
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(onDatabaseUpdateReceiver);
@@ -163,8 +173,24 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void updateUi(Book book){
+        mTxtDisplayName.setText(book.getCompanyName());
+        mTxtDisplayPrice.setText(String.valueOf(book.getPurchasePrice()));
+        mTxtDisplayStocks.setText(String.valueOf(book.getNumberOfStocks()));
+        mTxtDisplaySymbol.setText(book.getSymbol());
+        mTxtDisplayPrimaryExchange.setText(book.getPrimaryExchange());
+        mTxtDisplayLatestValue.setText(book.getLatestPrice());
+        mTxtDisplayLatestUpdate.setText(epochTimeConverter(book.getLatestUpdate()));
+        mTxtDisplaySector.setText(book.getSector());
         mTxtDisplayPrice.setText(book.getPurchasePrice());
         mTxtDisplayStocks.setText(String.valueOf(book.getNumberOfStocks()));
+    }
+
+    private String epochTimeConverter(String rawTime){
+        long epochValue = Long.parseLong(rawTime);
+        Date epochTime = new Date(epochValue);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy @ HH:mm:ss", Locale.getDefault());
+        String timeFormatted = simpleDateFormat.format(epochTime);
+        return timeFormatted;
     }
 
     private void bindToStockService(){
@@ -212,6 +238,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart()");
         bindToStockService();
     }
 

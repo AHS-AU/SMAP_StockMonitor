@@ -5,7 +5,7 @@
     <string name="purchase">Purchased at:\u0020</string>
     <string name="btnOverview1">Details</string>
     <string name="name">Name:</string>
-    <string name="price">Price:</string>
+    <string name="price">Purchased Price:</string>
     <string name="numStocks">#Stocks:</string>
     <string name="sector">Sector:</string>
     <string name="btnBack">Back</string>
