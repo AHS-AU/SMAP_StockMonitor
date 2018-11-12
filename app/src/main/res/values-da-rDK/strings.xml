@@ -24,4 +24,7 @@
     <string name="addTitle">Tilføj en Aktie fra API</string>
     <string name="refresh">Opdater</string>
     <string name="alt_app_name">AktieOvervåger</string>
+    <string name="adding">"Tilføjer "</string>
+    <string name="tothedb">" til Databasen"</string>
+    <string name="nosymbolfound">"Kunne ikke tilføje aktie med symbol: "</string>
 </resources>

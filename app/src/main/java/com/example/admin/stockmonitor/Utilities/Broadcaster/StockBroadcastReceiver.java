@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.admin.stockmonitor.R;
 import com.example.admin.stockmonitor.Room.Book.Book;
 import com.example.admin.stockmonitor.Room.Book.BookDao;
 import com.example.admin.stockmonitor.Room.Book.BookDatabase;
@@ -87,7 +88,8 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                             BookDatabase db = BookDatabase.getInstance(context);
                             BookDao mBookDao = db.bookDao();
                             mBookRepository.InsertBook(mBookDao, addBook);
-                            Toast.makeText(context,"Adding " + mSymbol + " to the Database", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,context.getResources().getString(R.string.adding) +
+                                    mSymbol + context.getResources().getString(R.string.tothedb), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -95,7 +97,7 @@ public final class StockBroadcastReceiver extends BroadcastReceiver {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context,"Could not add stock with symbol: " + mSymbol, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,context.getResources().getString(R.string.nosymbolfound) + mSymbol, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onErrorResponse() in " + action + " see Stack Trace for more info");
                 error.printStackTrace();
             }

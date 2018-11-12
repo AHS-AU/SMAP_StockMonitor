@@ -84,7 +84,8 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                     mStockAdapter.setBookList(mStockService.getAllStocks());
                     mStockAdapter.notifyDataSetChanged();
                 }
-            }, 1000);
+            }, 2000);
+            refreshStocks(true);
             Log.d(TAG, "onServiceConnected " + TAG);
 
         }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">au545208 Stocks</string>
+    <string name="app_name" translatable="false">au545208 Stocks</string>
     <string name="myStock">My Stocks:</string>
     <string name="stockName">Stock Name</string>
     <string name="purchase">Purchased at:\u0020</string>
@@ -26,6 +26,9 @@
     <string name="addPositive" translatable="false">OK</string>
     <string name="refresh">Refresh</string>
     <string name="alt_app_name">StockMonitor</string>
+    <string name="adding">"Adding "</string>
+    <string name="tothedb">" to the Database"</string>
+    <string name="nosymbolfound">"Could not add stock with symbol: "</string>
 
 
 </resources>
