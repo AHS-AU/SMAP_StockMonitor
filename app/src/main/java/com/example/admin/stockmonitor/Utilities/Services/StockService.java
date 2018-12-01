@@ -1,12 +1,17 @@
 package com.example.admin.stockmonitor.Utilities.Services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.support.v4.app.NotificationCompat;
@@ -113,6 +118,38 @@ public class StockService extends Service {
         }
     }
 
+    // https://stackoverflow.com/questions/47531742/startforeground-fail-after-upgrade-to-android-8-1
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createNotificationChannelApi28(Intent intent){
+        String NOTIFICATION_CHANNEL_ID = "com.example.admin.stockmonitor.notification.id";
+        String channelName = "STOCKMONITOR_FOREGROUND_SERVICE";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+
+        manager.createNotificationChannel(chan);
+        SimpleDateFormat mTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat mDate = new SimpleDateFormat("EEEE, dd. MMMM YYYY", Locale.getDefault());
+        String mNotificationMessage = "Last checked stocks prices at: " + mTime.format(new Date());
+
+        Notification mNotification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(getApplicationContext().getString(R.string.alt_app_name))
+                .setContentText(mNotificationMessage)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setTicker(mNotificationMessage)
+                .setSubText(mDate.format(new Date()))
+                .setShowWhen(false) // Removes the Default Timestamp
+                .setSmallIcon(R.mipmap.ic_launcher)
+                //.setDefaults(Notification.DEFAULT_SOUND) // Default sound, very annoying :)
+                .build();
+        startForeground(NOTIF_ID_STOCKSERVICE28, mNotification);
+        // Opens AsyncTask for Background Service
+        doBackgroundThing(getApplicationContext(), intent);
+
+    }
+
 
     /**********************************************************************************************
      *                                   Override Functions                                       *
@@ -152,23 +189,30 @@ public class StockService extends Service {
                 while(isRunning){
                     try{
                         Thread.sleep(mServiceInterval);
-                        SimpleDateFormat mTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-                        SimpleDateFormat mDate = new SimpleDateFormat("EEEE, dd. MMMM YYYY", Locale.getDefault());
-                        String mNotificationMessage = "Last checked stocks prices at: " + mTime.format(new Date());
-                        Notification mNotification = new NotificationCompat.Builder(StockService.this, NOTIF_CHANNEL_ID_STOCKSERVICE)
-                                .setContentTitle(getApplicationContext().getString(R.string.alt_app_name))
-                                .setContentText(mNotificationMessage)
-                                .setTicker(mNotificationMessage)
-                                .setSubText(mDate.format(new Date()))
-                                .setShowWhen(false) // Removes the Default Timestamp
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setChannelId(NOTIF_CHANNEL_ID_STOCKSERVICE)
-                                //.setDefaults(Notification.DEFAULT_SOUND) // Default sound, very annoying :)
-                                .build();
-                        startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
+                        // https://stackoverflow.com/questions/47531742/startforeground-fail-after-upgrade-to-android-8-1
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                            Log.d(TAG, "Hello If Equation");
+                            createNotificationChannelApi28(intent);
+                        }else{
+                            Log.d(TAG, "Hello Not If Equation");
+                            SimpleDateFormat mTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                            SimpleDateFormat mDate = new SimpleDateFormat("EEEE, dd. MMMM YYYY", Locale.getDefault());
+                            String mNotificationMessage = "Last checked stocks prices at: " + mTime.format(new Date());
+                            Notification mNotification = new NotificationCompat.Builder(StockService.this, NOTIF_CHANNEL_ID_STOCKSERVICE)
+                                    .setContentTitle(getApplicationContext().getString(R.string.alt_app_name))
+                                    .setContentText(mNotificationMessage)
+                                    .setTicker(mNotificationMessage)
+                                    .setSubText(mDate.format(new Date()))
+                                    .setShowWhen(false) // Removes the Default Timestamp
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setChannelId(NOTIF_CHANNEL_ID_STOCKSERVICE)
+                                    //.setDefaults(Notification.DEFAULT_SOUND) // Default sound, very annoying :)
+                                    .build();
+                            startForeground(NOTIF_ID_STOCKSERVICE, mNotification);
+                            // Opens AsyncTask for Background Service
+                            doBackgroundThing(getApplicationContext(), intent);
+                        }
 
-                        // Opens AsyncTask for Background Service
-                        doBackgroundThing(getApplicationContext(), intent);
 
                     }catch (InterruptedException e){
                         Log.d(TAG, "Error: " + e + " in serviceThread");

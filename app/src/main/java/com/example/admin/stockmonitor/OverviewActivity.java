@@ -27,7 +27,7 @@ import com.example.admin.stockmonitor.Room.Book.BookDatabase;
 import com.example.admin.stockmonitor.Utilities.Adapters.StockAdapter;
 import com.example.admin.stockmonitor.Room.Book.BookRepository;
 import com.example.admin.stockmonitor.Utilities.Broadcaster.StockBroadcastReceiver;
-import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
+    import com.example.admin.stockmonitor.Utilities.Dialogs.AddStockDialog;
 import com.example.admin.stockmonitor.Utilities.Services.StockService;
 import com.example.admin.stockmonitor.Utilities.StockIntentFilter;
 
@@ -94,7 +94,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                     mStockAdapter.setBookList(mStockService.getAllStocks());
                     mStockAdapter.notifyDataSetChanged();
                 }
-            }, 2000);
+            }, 1000);
             refreshStocks(true);
             Log.d(TAG, "onServiceConnected " + TAG);
 
@@ -170,7 +170,7 @@ public class OverviewActivity extends AppCompatActivity implements AddStockDialo
                     isRefreshing = false;
                     invalidateOptionsMenu();
                 }
-            }, 1000);
+            }, 2000);
             isRefreshing = true;
             LocalBroadcastManager.getInstance(OverviewActivity.this).sendBroadcast(new Intent(FILTER_DATA_UPDATE));
         } else{

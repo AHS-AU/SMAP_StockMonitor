@@ -12,6 +12,7 @@ public final class SharedConstants {
     // Notification & Service Channel & Notice Ids
     public static final String NOTIF_CHANNEL_ID_STOCKSERVICE = "STOCKSERVICE_CHANNEL_ID";
     public static final int NOTIF_ID_STOCKSERVICE = 201;
+    public static final int NOTIF_ID_STOCKSERVICE28 = 202;
 
     // Intent Extras
     public static final String EXTRA_STOCK = "EXTRA_STOCK";
